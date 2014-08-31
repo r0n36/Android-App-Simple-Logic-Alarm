@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Simple Logic Alarm</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="sat">Sa</string>
+    <string name="sun">Su</string>
+    <string name="mon">Mo</string>
+    <string name="tue">Tu</string>
+    <string name="wed">We</string>
+    <string name="thr">Th</string>
+    <string name="fri">Fr</string>
+    <string name="repeat">Repeat</string>
+
+</resources>
