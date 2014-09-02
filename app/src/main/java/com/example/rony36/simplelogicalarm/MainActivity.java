@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
@@ -44,6 +45,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        DatabaseHandler db = new DatabaseHandler(this);
+//        db.addAlarm(new Alarm());
+//        List<Alarm> contacts = db.getAllContacts();
 
         mTimeView = (TextView) findViewById(R.id.timeTitle);
         mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
