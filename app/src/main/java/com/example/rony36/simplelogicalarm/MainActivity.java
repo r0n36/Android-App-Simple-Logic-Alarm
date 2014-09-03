@@ -46,10 +46,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        DatabaseHandler db = new DatabaseHandler(this);
-//        db.addAlarm(new Alarm());
-//        List<Alarm> contacts = db.getAllContacts();
-
+//        List<Alarm> alarms = db.getAllAlarms();
         mTimeView = (TextView) findViewById(R.id.timeTitle);
         mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
         mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
@@ -114,15 +111,6 @@ public class MainActivity extends Activity {
                     AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
                     am.cancel(pendingIntent);
                 }
-                try {
-                    FileOutputStream fos = openFileOutput(OnOffSTATUS,Context.MODE_PRIVATE);
-
-                    fos.write(status.getBytes());
-                    fos.close();
-
-                }catch (Throwable t) {
-                   //Toast.makeText(this, "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
-                }
             }
         });
 
@@ -177,19 +165,12 @@ public class MainActivity extends Activity {
 
             mAlarmOnOff.setChecked(true);
 
-            try {
-                FileOutputStream fos = openFileOutput(STORETEXT,Context.MODE_PRIVATE);
-
-                fos.write(txtToSave.getBytes());
-                fos.close();
-
-            }catch (Throwable t) {
-//                Toast.makeText(this, "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
-            }
-
-
             mTimeView.setText(timeForShow);
             mAmPmTextView.setText(am_pm);
+
+//            DatabaseHandler db = new DatabaseHandler(this);
+//            db.addAlarm(new Alarm("11:30",1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+
             setInstantAlarm(calSet);
         }
     };

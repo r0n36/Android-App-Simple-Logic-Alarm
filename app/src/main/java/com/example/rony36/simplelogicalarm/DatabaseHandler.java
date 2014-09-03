@@ -14,7 +14,7 @@ import java.util.List;
  * Created by RonyLap on 9/2/2014.
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "simpleAlarm";
     private static final String TABLE_LOGIC_ALARM = "logicAlarm";
 
@@ -53,7 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_SAT + " INTEGER DEFAULT 0,"
                 + KEY_URGENCY + " INTEGER DEFAULT -1,"
                 + KEY_OFF_METHOD + " INTEGER DEFAULT -1,"
-                + KEY_RINGTONE + " TEXT"
+                + KEY_RINGTONE + " TEXT,"
                 + KEY_NOTE + " TEXT"+
                 ")";
         db.execSQL(CREATE_LOGIC_ALARM_TABLE);

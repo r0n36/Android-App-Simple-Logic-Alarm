@@ -61,6 +61,37 @@ public class Alarm {
         this._note          = _note;
     }
 
+    public Alarm(String alarm_time,
+                 int _status,
+                 int _repeat,
+                 int _sun,
+                 int _mon,
+                 int _tue,
+                 int _wed,
+                 int _thu,
+                 int _fri,
+                 int _sat,
+                 int _urgency,
+                 int _off_method,
+                 String _ringtone_path,
+                 String _note){
+
+        this._alarm_time    = alarm_time;
+        this._status        = _status;
+        this._repeat        = _repeat;
+        this._sun           = _sun;
+        this._mon           = _mon;
+        this._tue           = _tue;
+        this._wed           = _wed;
+        this._thu           = _thu;
+        this._fri           = _fri;
+        this._sat           = _sat;
+        this._urgency       = _urgency;
+        this._off_method    = _off_method;
+        this._ringtone_path = _ringtone_path;
+        this._note          = _note;
+    }
+
     // constructor
 //    public Alarm(String name, String _phone_number){
 //        this._name = name;
