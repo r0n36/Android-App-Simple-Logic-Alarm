@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
         mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
         mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
         mRepeatCheck = (CheckBox) findViewById(R.id.repeatCheckBox);
+        mDrop = (ImageView) findViewById(R.id.arrowDown);
         DatabaseHandler db = new DatabaseHandler(this);
 
         if(db.getAlarmsCount() != 0) {
@@ -115,6 +116,7 @@ public class MainActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mDetailsLay = (LinearLayout) findViewById(R.id.detailsLay);
                 if(isChecked) {
+                    mDetailsLay.setVisibility(View.VISIBLE);
                     DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
                     dropDownAnim.setDuration(500);
                     mDetailsLay.startAnimation(dropDownAnim);
@@ -123,6 +125,13 @@ public class MainActivity extends Activity {
                     dropDownAnim.setDuration(500);
                     mDetailsLay.startAnimation(dropDownAnim);
                 }
+            }
+        });
+
+        mDrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
