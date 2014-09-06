@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
     private Switch mAlarmOnOff;
     private CheckBox mRepeatCheck;
     private ImageView mDrop;
+    private ImageView mUp;
     private Toast mToast;
     private TimePickerDialog timePickerDialog;
     private LinearLayout mDetailsLay;
@@ -55,6 +56,7 @@ public class MainActivity extends Activity {
         mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
         mRepeatCheck = (CheckBox) findViewById(R.id.repeatCheckBox);
         mDrop = (ImageView) findViewById(R.id.arrowDown);
+        mUp = (ImageView) findViewById(R.id.arrowUp);
         DatabaseHandler db = new DatabaseHandler(this);
 
         if(db.getAlarmsCount() != 0) {
@@ -110,18 +112,15 @@ public class MainActivity extends Activity {
             }
         });
 
-
+        mDetailsLay = (LinearLayout) findViewById(R.id.detailsLay);
         mRepeatCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mDetailsLay = (LinearLayout) findViewById(R.id.detailsLay);
                 if(isChecked) {
+                    mUp.setVisibility(View.VISIBLE);
+                    mDrop.setVisibility(View.GONE);
                     mDetailsLay.setVisibility(View.VISIBLE);
                     DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
-                    dropDownAnim.setDuration(500);
-                    mDetailsLay.startAnimation(dropDownAnim);
-                }else {
-                    DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, false);
                     dropDownAnim.setDuration(500);
                     mDetailsLay.startAnimation(dropDownAnim);
                 }
@@ -131,7 +130,23 @@ public class MainActivity extends Activity {
         mDrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mUp.setVisibility(View.VISIBLE);
+                mDrop.setVisibility(View.GONE);
+                mDetailsLay.setVisibility(View.VISIBLE);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
+                dropDownAnim.setDuration(500);
+                mDetailsLay.startAnimation(dropDownAnim);
+            }
+        });
 
+        mUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUp.setVisibility(View.GONE);
+                mDrop.setVisibility(View.VISIBLE);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, false);
+                dropDownAnim.setDuration(500);
+                mDetailsLay.startAnimation(dropDownAnim);
             }
         });
 
