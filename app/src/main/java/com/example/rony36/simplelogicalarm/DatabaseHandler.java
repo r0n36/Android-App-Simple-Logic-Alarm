@@ -124,6 +124,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.getString(14)
         );
         // return alarm
+        cursor.close();
         return alarm;
     }
 
@@ -159,7 +160,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 alarmList.add(alarm);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         // return alarm list
         return alarmList;
     }
@@ -203,7 +204,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_LOGIC_ALARM;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+//        cursor.close();
 
         // return count
         return cursor.getCount();

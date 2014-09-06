@@ -61,96 +61,250 @@
         android:id="@+id/view" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="50sp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/view"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@drawable/bg_shadow"
-        android:layout_marginTop="5dp">
+        android:animateLayoutChanges="true"
+        android:id="@+id/detailsLay">
 
-        <CheckBox
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50sp">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:text="@string/repeat"
+                android:id="@+id/repeatCheckBox"
+                android:longClickable="false"
+                android:textColor="@android:color/background_light"
+                android:paddingTop="15sp"
+                android:paddingRight="15sp"
+                android:paddingLeft="1sp"
+                android:layout_gravity="top"
+                android:paddingBottom="15sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:gravity="top"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/sat"
+                android:id="@+id/satTextView"
+                android:textColor="@android:color/holo_orange_light"
+                android:layout_marginLeft="2sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/sun"
+                android:id="@+id/sunTextView"
+                android:textColor="@android:color/holo_orange_light"
+                android:gravity="top"
+                android:layout_marginLeft="2sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/mon"
+                android:id="@+id/monTextView"
+                android:textColor="@android:color/holo_orange_light"
+                android:gravity="top"
+                android:layout_marginLeft="2sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/tue"
+                android:id="@+id/tueTextView"
+                android:textColor="@android:color/holo_orange_light"
+                android:gravity="top"
+                android:layout_marginLeft="2sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/wed"
+                android:id="@+id/wedTextView"
+                android:textColor="@android:color/holo_orange_light"
+                android:gravity="top"
+                android:layout_marginLeft="2sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/thr"
+                android:id="@+id/thrTextView"
+                android:textColor="@android:color/holo_orange_light"
+                android:gravity="top"
+                android:layout_marginLeft="2sp" />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="20sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/fri"
+                android:id="@+id/friTextView"
+                android:gravity="top"
+                android:textColor="@android:color/holo_orange_light"
+                android:layout_marginLeft="2sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/arrowDown"
+                android:src="@android:drawable/arrow_down_float"
+                android:gravity="top"
+                android:layout_gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/sun"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/sun"
+                android:id="@+id/tSun"
+                android:textOff="@string/sun" />
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/mon"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/mon"
+                android:textOff="@string/mon"
+                android:id="@+id/tMon"
+                android:layout_gravity="left|top" />
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/tue"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/tue"
+                android:textOff="@string/tue"
+                android:id="@+id/tTue"
+                android:layout_gravity="left|top" />
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/wed"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/wed"
+                android:textOff="@string/wed"
+                android:id="@+id/tWed"
+                android:layout_gravity="left|top" />
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/thr"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/thr"
+                android:textOff="@string/thr"
+                android:id="@+id/tThr"
+                android:layout_gravity="left|top" />
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/fri"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/fri"
+                android:textOff="@string/fri"
+                android:id="@+id/tFri"
+                android:layout_gravity="left|top" />
+            <ToggleButton
+                android:layout_width="50sp"
+                android:layout_height="35sp"
+                android:text="@string/sat"
+                android:textColor="@android:color/background_light"
+                android:textOn="@string/sat"
+                android:textOff="@string/sat"
+                android:id="@+id/tSat"
+                android:layout_gravity="left|top" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/repeat"
-            android:id="@+id/repeatCheckBox"
-            android:longClickable="false"
-            android:textColor="@android:color/background_light"
-            android:paddingTop="15sp"
-            android:paddingRight="15sp"
-            android:paddingLeft="1sp"
-            android:paddingBottom="15sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/sat"
-            android:id="@+id/satTextView"
-            android:layout_gravity="center_vertical|right"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_marginLeft="2sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/sun"
-            android:id="@+id/sunTextView"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="2sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/mon"
-            android:id="@+id/monTextView"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="2sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/tue"
-            android:id="@+id/tueTextView"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="2sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/wed"
-            android:id="@+id/wedTextView"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="2sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/thr"
-            android:id="@+id/thrTextView"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="2sp" />
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="20sp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/fri"
-            android:id="@+id/friTextView"
-            android:layout_gravity="center_vertical|right"
-            android:textColor="@android:color/holo_orange_light"
-            android:layout_marginLeft="2sp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="15sp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wake"
+                android:textStyle="bold"
+                android:textColor="@android:color/background_light"
+                android:layout_margin="5sp" />
 
-        <ImageView
+            <RadioGroup
+                android:id="@+id/radioWake"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/wakeLow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radioLow"
+                    android:checked="true"
+                    android:textColor="@android:color/background_light" />
+
+                <RadioButton
+                    android:id="@+id/wakeMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/background_light"
+                    android:text="@string/radioMedium" />
+                <RadioButton
+                    android:id="@+id/wakeHigh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/background_light"
+                    android:text="@string/radioHigh" />
+            </RadioGroup>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/arrowDown"
-            android:src="@android:drawable/arrow_down_float"
-            android:layout_gravity="center_vertical" />
+            android:orientation="horizontal"
+            android:layout_marginTop="15sp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/method"
+                android:textStyle="bold"
+                android:textColor="@android:color/background_light"
+                android:layout_margin="5sp" />
+            <RadioGroup
+                android:id="@+id/radioMethod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/methodNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stopNormal"
+                    android:checked="true"
+                    android:textColor="@android:color/background_light" />
+
+                <RadioButton
+                    android:id="@+id/methodPuzzle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/background_light"
+                    android:text="@string/stopPuzzle" />
+                <RadioButton
+                    android:id="@+id/methodMath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/background_light"
+                    android:text="@string/stopMath" />
+            </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

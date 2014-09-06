@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -33,6 +35,7 @@ public class MainActivity extends Activity {
     private ImageView mDrop;
     private Toast mToast;
     private TimePickerDialog timePickerDialog;
+    private LinearLayout mDetailsLay;
 
     String STORETEXT="storetext.txt";
     String OnOffSTATUS = "onOffStatus.txt";
@@ -50,34 +53,26 @@ public class MainActivity extends Activity {
         mTimeView = (TextView) findViewById(R.id.timeTitle);
         mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
         mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
+        mRepeatCheck = (CheckBox) findViewById(R.id.repeatCheckBox);
+        DatabaseHandler db = new DatabaseHandler(this);
 
-        try {
-            FileInputStream fis = openFileInput(STORETEXT);
-            FileInputStream sts = openFileInput(OnOffSTATUS);
-            byte[] dataArray = new byte[fis.available()];
-            byte[] dataArray2 = new byte[sts.available()];
-            while (fis.read(dataArray) != -1) {
-                read_data = new String(dataArray);
-            }
-            while (fis.read(dataArray) != -1) {
-                read_status = new String(dataArray2);
-            }
+        if(db.getAlarmsCount() != 0) {
+            Alarm first_alarm = db.getAlarm(1);
 
-            String[] data_str = read_data.split(" ");
-
-            if(read_status == "ON"){
+            if (first_alarm.get_status() == 1) {
                 mAlarmOnOff.setChecked(true);
-            }else{
+            } else {
                 mAlarmOnOff.setChecked(false);
             }
 
-            mTimeView.setText(data_str[0]);
-            mAmPmTextView.setText(data_str[1]);
-
-            fis.close();
-        }catch(IOException e){
-            Log.i("MainActivity", "Empty File");
+            mTimeView.setText(first_alarm.get_alarm_time());
+            mAmPmTextView.setText("AM");
+        }else{
+            mAlarmOnOff.setChecked(false);
+            mTimeView.setText("--:--");
+            mAmPmTextView.setText("--");
         }
+        db.close();
 
 
         mAlarmOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,6 +105,23 @@ public class MainActivity extends Activity {
                     PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 3, intent, 0);
                     AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
                     am.cancel(pendingIntent);
+                }
+            }
+        });
+
+
+        mRepeatCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mDetailsLay = (LinearLayout) findViewById(R.id.detailsLay);
+                if(isChecked) {
+                    DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
+                    dropDownAnim.setDuration(500);
+                    mDetailsLay.startAnimation(dropDownAnim);
+                }else {
+                    DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, false);
+                    dropDownAnim.setDuration(500);
+                    mDetailsLay.startAnimation(dropDownAnim);
                 }
             }
         });
@@ -168,9 +180,9 @@ public class MainActivity extends Activity {
             mTimeView.setText(timeForShow);
             mAmPmTextView.setText(am_pm);
 
-//            DatabaseHandler db = new DatabaseHandler(this);
-//            db.addAlarm(new Alarm("11:30",1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
-
+            DatabaseHandler db = new DatabaseHandler(getBaseContext());
+            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+            db.close();
             setInstantAlarm(calSet);
         }
     };

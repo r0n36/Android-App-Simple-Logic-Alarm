@@ -12,5 +12,13 @@
     <string name="thr">Th</string>
     <string name="fri">Fr</string>
     <string name="repeat">Repeat</string>
+    <string name="wake">Wake Up Urgency:</string>
+    <string name="radioLow">Low</string>
+    <string name="radioMedium">Medium</string>
+    <string name="radioHigh">High</string>
+    <string name="method">Alert Stop Method:</string>
+    <string name="stopNormal">Normal</string>
+    <string name="stopPuzzle">Puzzle</string>
+    <string name="stopMath">Math</string>
 
 </resources>
