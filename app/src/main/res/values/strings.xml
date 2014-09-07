@@ -21,5 +21,6 @@
     <string name="stopPuzzle">Puzzle</string>
     <string name="stopMath">Math</string>
     <string name="addAlarm">Add</string>
+    <string name="note">Note:</string>
 
 </resources>

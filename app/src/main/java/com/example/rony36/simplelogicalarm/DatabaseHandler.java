@@ -18,21 +18,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "simpleAlarm";
     private static final String TABLE_LOGIC_ALARM = "logicAlarm";
 
-    private static final String KEY_ID = "_id";
-    public static final String KEY_TIME = "alarm_time";
-    private static final String KEY_STATUS = "status";
-    private static final String KEY_REPEAT = "repeat";
-    private static final String KEY_SUN = "sun";
-    private static final String KEY_MON = "mon";
-    private static final String KEY_TUE = "tue";
-    private static final String KEY_WED = "wed";
-    private static final String KEY_THU = "thu";
-    private static final String KEY_FRI = "fri";
-    private static final String KEY_SAT = "sat";
-    private static final String KEY_URGENCY = "urgency";
-    private static final String KEY_OFF_METHOD = "off_method";
-    private static final String KEY_RINGTONE = "ringtone_path";
-    private static final String KEY_NOTE = "note";
+    public static final String KEY_ID          = "_id";
+    public static final String KEY_TIME        = "alarm_time";
+    public static final String KEY_STATUS      = "status";
+    public static final String KEY_REPEAT      = "repeat";
+    public static final String KEY_SUN         = "sun";
+    public static final String KEY_MON         = "mon";
+    public static final String KEY_TUE         = "tue";
+    public static final String KEY_WED         = "wed";
+    public static final String KEY_THU         = "thu";
+    public static final String KEY_FRI         = "fri";
+    public static final String KEY_SAT         = "sat";
+    public static final String KEY_URGENCY     = "urgency";
+    public static final String KEY_OFF_METHOD  = "off_method";
+    public static final String KEY_RINGTONE    = "ringtone_path";
+    public static final String KEY_NOTE        = "note";
 
     public DatabaseHandler(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

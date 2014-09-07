@@ -59,38 +59,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        List<Alarm> alarms = db.getAllAlarms();
-//        mTimeView = (TextView) findViewById(R.id.timeTitle);
-//        mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
-//        mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
-//        mRepeatCheck = (CheckBox) findViewById(R.id.repeatCheckBox);
-//        mDrop = (ImageView) findViewById(R.id.arrowDown);
-//        mUp = (ImageView) findViewById(R.id.arrowUp);
         DatabaseHandler db = new DatabaseHandler(this);
 //        db.addAlarm(new Alarm("12:30 AM",1,0,0,0,0,0,1,0,0,-1,-1,"/","Test"));
-//        if(db.getAlarmsCount() != 0) {
-//            Alarm first_alarm = db.getAlarm(1);
-//
-//            if (first_alarm.get_status() == 1) {
-//                mAlarmOnOff.setChecked(true);
-//            } else {
-//                mAlarmOnOff.setChecked(false);
-//            }
-//
-//            mTimeView.setText(first_alarm.get_alarm_time());
-//            mAmPmTextView.setText("AM");
-//        }else{
-//            mAlarmOnOff.setChecked(false);
-//            mTimeView.setText("--:--");
-//            mAmPmTextView.setText("--");
-//        }
         populateListView();
         db.close();
-    }
-
-
-    private void allActions(){
-
     }
 
     private void openTimePickerDialog(boolean is24r){
@@ -152,8 +124,38 @@ public class MainActivity extends Activity {
         Cursor alarms = db.getAllAlarms();
 
         startManagingCursor(alarms);
-        String[] time = new String[]{DatabaseHandler.KEY_TIME};
-        int[] toViewIDs = new int[]{R.id.timeTitle};
+        String[] time = new String[]{
+                DatabaseHandler.KEY_TIME,
+                DatabaseHandler.KEY_STATUS,
+                DatabaseHandler.KEY_REPEAT,
+                DatabaseHandler.KEY_SUN,
+                DatabaseHandler.KEY_MON,
+                DatabaseHandler.KEY_TUE,
+                DatabaseHandler.KEY_WED,
+                DatabaseHandler.KEY_THU,
+                DatabaseHandler.KEY_FRI,
+                DatabaseHandler.KEY_SAT,
+//                DatabaseHandler.KEY_URGENCY,
+//                DatabaseHandler.KEY_OFF_METHOD
+//                DatabaseHandler.KEY_RINGTONE,
+//                DatabaseHandler.KEY_NOTE
+        };
+        int[] toViewIDs = new int[]{
+                R.id.timeTitle,
+                R.id.alarmOnOff,
+                R.id.repeatCheckBox,
+                R.id.sunTextView,
+                R.id.monTextView,
+                R.id.tueTextView,
+                R.id.wedTextView,
+                R.id.thrTextView,
+                R.id.friTextView,
+                R.id.satTextView,
+//                R.id.radioWake,
+//                R.id.radioMethod
+                //R.id.ringTone,
+//                R.id.note
+        };
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                 this,
