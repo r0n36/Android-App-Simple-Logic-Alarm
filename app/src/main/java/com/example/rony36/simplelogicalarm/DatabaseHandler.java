@@ -18,8 +18,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "simpleAlarm";
     private static final String TABLE_LOGIC_ALARM = "logicAlarm";
 
-    private static final String KEY_ID = "id";
-    private static final String KEY_TIME = "alarm_time";
+    private static final String KEY_ID = "_id";
+    public static final String KEY_TIME = "alarm_time";
     private static final String KEY_STATUS = "status";
     private static final String KEY_REPEAT = "repeat";
     private static final String KEY_SUN = "sun";
@@ -129,7 +129,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Getting All Alarms
-    public List<Alarm> getAllAlarms() {
+//    public List<Alarm> getAllAlarms() {
+    public Cursor getAllAlarms(){
         List<Alarm> alarmList = new ArrayList<Alarm>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_LOGIC_ALARM;
@@ -160,9 +161,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 alarmList.add(alarm);
             } while (cursor.moveToNext());
         }
-        cursor.close();
+//        cursor.close();
         // return alarm list
-        return alarmList;
+//        return alarmList;
+        return cursor;
     }
 
     // Updating single alarm

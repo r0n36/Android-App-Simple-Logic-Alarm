@@ -2,20 +2,27 @@ package com.example.rony36.simplelogicalarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -37,6 +44,7 @@ public class MainActivity extends Activity {
     private Toast mToast;
     private TimePickerDialog timePickerDialog;
     private LinearLayout mDetailsLay;
+    private Long itemId;
 
     String STORETEXT="storetext.txt";
     String OnOffSTATUS = "onOffStatus.txt";
@@ -44,6 +52,7 @@ public class MainActivity extends Activity {
     String read_data = null;
     String read_status = null;
 
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,111 +60,37 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 //        List<Alarm> alarms = db.getAllAlarms();
-        mTimeView = (TextView) findViewById(R.id.timeTitle);
-        mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
-        mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
-        mRepeatCheck = (CheckBox) findViewById(R.id.repeatCheckBox);
-        mDrop = (ImageView) findViewById(R.id.arrowDown);
-        mUp = (ImageView) findViewById(R.id.arrowUp);
+//        mTimeView = (TextView) findViewById(R.id.timeTitle);
+//        mAmPmTextView = (TextView) findViewById(R.id.amPmTextView);
+//        mAlarmOnOff = (Switch) findViewById(R.id.alarmOnOff);
+//        mRepeatCheck = (CheckBox) findViewById(R.id.repeatCheckBox);
+//        mDrop = (ImageView) findViewById(R.id.arrowDown);
+//        mUp = (ImageView) findViewById(R.id.arrowUp);
         DatabaseHandler db = new DatabaseHandler(this);
-
-        if(db.getAlarmsCount() != 0) {
-            Alarm first_alarm = db.getAlarm(1);
-
-            if (first_alarm.get_status() == 1) {
-                mAlarmOnOff.setChecked(true);
-            } else {
-                mAlarmOnOff.setChecked(false);
-            }
-
-            mTimeView.setText(first_alarm.get_alarm_time());
-            mAmPmTextView.setText("AM");
-        }else{
-            mAlarmOnOff.setChecked(false);
-            mTimeView.setText("--:--");
-            mAmPmTextView.setText("--");
-        }
+//        db.addAlarm(new Alarm("12:30 AM",1,0,0,0,0,0,1,0,0,-1,-1,"/","Test"));
+//        if(db.getAlarmsCount() != 0) {
+//            Alarm first_alarm = db.getAlarm(1);
+//
+//            if (first_alarm.get_status() == 1) {
+//                mAlarmOnOff.setChecked(true);
+//            } else {
+//                mAlarmOnOff.setChecked(false);
+//            }
+//
+//            mTimeView.setText(first_alarm.get_alarm_time());
+//            mAmPmTextView.setText("AM");
+//        }else{
+//            mAlarmOnOff.setChecked(false);
+//            mTimeView.setText("--:--");
+//            mAmPmTextView.setText("--");
+//        }
+        populateListView();
         db.close();
+    }
 
 
-        mAlarmOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    status = "ON";
-                    String[] date_str = read_data.split(" ");
-                    String[] coreTime = date_str[0].split(":");
-                    Integer dHour = date_str[1].toCharArray()[0] == 'P' ? Integer.parseInt(coreTime[0])+12 : Integer.parseInt(coreTime[0]);
-//                    Integer milliTime = dHour * 1000 + Integer.parseInt(coreTime[1])* 1000;
+    private void allActions(){
 
-                    Calendar calNow = Calendar.getInstance();
-                    Calendar calSet = (Calendar) calNow.clone();
-
-                    calSet.set(Calendar.HOUR_OF_DAY, dHour);
-                    calSet.set(Calendar.MINUTE, Integer.parseInt(coreTime[1]));
-                    calSet.set(Calendar.SECOND, 0);
-                    calSet.set(Calendar.MILLISECOND, 0);
-
-                    if(calSet.compareTo(calNow) <= 0){
-                        //Today Set time passed, count to tomorrow
-                        calSet.add(Calendar.DATE, 1);
-                    }
-
-                    setInstantAlarm(calSet);
-                }else{
-                    status = "OFF";
-                    Intent intent = new Intent(MainActivity.this, AlarmReceiverActivity.class);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 3, intent, 0);
-                    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    am.cancel(pendingIntent);
-                }
-            }
-        });
-
-        mDetailsLay = (LinearLayout) findViewById(R.id.detailsLay);
-        mRepeatCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    mUp.setVisibility(View.VISIBLE);
-                    mDrop.setVisibility(View.GONE);
-                    mDetailsLay.setVisibility(View.VISIBLE);
-                    DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
-                    dropDownAnim.setDuration(500);
-                    mDetailsLay.startAnimation(dropDownAnim);
-                }
-            }
-        });
-
-        mDrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mUp.setVisibility(View.VISIBLE);
-                mDrop.setVisibility(View.GONE);
-                mDetailsLay.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
-                dropDownAnim.setDuration(500);
-                mDetailsLay.startAnimation(dropDownAnim);
-            }
-        });
-
-        mUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mUp.setVisibility(View.GONE);
-                mDrop.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, false);
-                dropDownAnim.setDuration(500);
-                mDetailsLay.startAnimation(dropDownAnim);
-            }
-        });
-
-        mTimeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTimePickerDialog(false);
-            }
-        });
     }
 
     private void openTimePickerDialog(boolean is24r){
@@ -199,17 +134,141 @@ public class MainActivity extends Activity {
 
             txtToSave = timeForShow+" "+ am_pm;
 
-            mAlarmOnOff.setChecked(true);
+//            mAlarmOnOff.setChecked(true);
+//
+//            mTimeView.setText(timeForShow);
+//            mAmPmTextView.setText(am_pm);
 
-            mTimeView.setText(timeForShow);
-            mAmPmTextView.setText(am_pm);
-
-            DatabaseHandler db = new DatabaseHandler(getBaseContext());
-            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
-            db.close();
-            setInstantAlarm(calSet);
+//            DatabaseHandler db = new DatabaseHandler(getBaseContext());
+//            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+//            db.close();
+//            setInstantAlarm(calSet);
         }
     };
+
+
+    private void populateListView(){
+        DatabaseHandler db = new DatabaseHandler(this);
+        Cursor alarms = db.getAllAlarms();
+
+        startManagingCursor(alarms);
+        String[] time = new String[]{DatabaseHandler.KEY_TIME};
+        int[] toViewIDs = new int[]{R.id.timeTitle};
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                this,
+                R.layout.per_alarm_activity,
+                alarms,
+                time,
+                toViewIDs
+                );
+
+        ListView listView = (ListView) findViewById(R.id.allAlarmsView);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final TextView mTimeView1 = (TextView) view.findViewById(R.id.timeTitle);
+                final Switch mAlarmOnOff1 = (Switch) view.findViewById(R.id.alarmOnOff);
+                final CheckBox mRepeatCheck1 = (CheckBox) view.findViewById(R.id.repeatCheckBox);
+                final ImageView mDrop1 = (ImageView) view.findViewById(R.id.arrowDown);
+                final ImageView mUp1 = (ImageView) view.findViewById(R.id.arrowUp);
+                final LinearLayout mDetailsLay1 = (LinearLayout) view.findViewById(R.id.detailsLay);
+                final ImageButton mRemoveAlarm = (ImageButton) view.findViewById(R.id.removeAlarm);
+                itemId = id;
+
+                mTimeView1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openTimePickerDialog(false);
+                    }
+                });
+
+                mDrop1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mRemoveAlarm.setVisibility(View.VISIBLE);
+                        mUp1.setVisibility(View.VISIBLE);
+                        mDrop1.setVisibility(View.GONE);
+                        mDetailsLay1.setVisibility(View.VISIBLE);
+                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay1, 500, true);
+                        dropDownAnim.setDuration(500);
+                        mDetailsLay1.startAnimation(dropDownAnim);
+                    }
+                });
+
+                mUp1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mRemoveAlarm.setVisibility(View.GONE);
+                        mUp1.setVisibility(View.GONE);
+                        mDrop1.setVisibility(View.VISIBLE);
+                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay1, 500, false);
+                        dropDownAnim.setDuration(500);
+                        mDetailsLay1.startAnimation(dropDownAnim);
+                    }
+                });
+
+                mRepeatCheck1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if(isChecked) {
+                            mRemoveAlarm.setVisibility(View.VISIBLE);
+                            mUp1.setVisibility(View.VISIBLE);
+                            mDrop1.setVisibility(View.GONE);
+                            mDetailsLay1.setVisibility(View.VISIBLE);
+                            DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay1, 500, true);
+                            dropDownAnim.setDuration(500);
+                            mDetailsLay1.startAnimation(dropDownAnim);
+                        }
+                    }
+                });
+
+                mAlarmOnOff1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if(isChecked){
+                            status = "ON";
+                            String[] date_str = read_data.split(" ");
+                            String[] coreTime = date_str[0].split(":");
+                            Integer dHour = date_str[1].toCharArray()[0] == 'P' ? Integer.parseInt(coreTime[0])+12 : Integer.parseInt(coreTime[0]);
+                            //Integer milliTime = dHour * 1000 + Integer.parseInt(coreTime[1])* 1000;
+
+                            Calendar calNow = Calendar.getInstance();
+                            Calendar calSet = (Calendar) calNow.clone();
+
+                            calSet.set(Calendar.HOUR_OF_DAY, dHour);
+                            calSet.set(Calendar.MINUTE, Integer.parseInt(coreTime[1]));
+                            calSet.set(Calendar.SECOND, 0);
+                            calSet.set(Calendar.MILLISECOND, 0);
+
+                            if(calSet.compareTo(calNow) <= 0){
+                                //Today Set time passed, count to tomorrow
+                                calSet.add(Calendar.DATE, 1);
+                            }
+
+                            setInstantAlarm(calSet);
+                        }else{
+                            status = "OFF";
+                            Intent intent = new Intent(MainActivity.this, AlarmReceiverActivity.class);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 3, intent, 0);
+                            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                            am.cancel(pendingIntent);
+                        }
+                    }
+                });
+                mRemoveAlarm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog diaBox = AskOption(itemId);
+                        diaBox.show();
+                    }
+                });
+            }
+        });
+        adapter.notifyDataSetChanged();
+        db.close();
+    }
 
     private void setInstantAlarm(Calendar timeFromNow){
         try{
@@ -241,6 +300,34 @@ public class MainActivity extends Activity {
                 Log.i("MainActivity", "Number Format exception");
             }
         }
+    }
+
+    private AlertDialog AskOption(long id){
+        final int alm_id = (int) id;
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+            //set message, title, and icon
+            .setTitle("Delete")
+            .setMessage("Do you want to Delete")
+            //.setIcon(R.drawable.delete)
+
+            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+                    db.deleteAlarm(db.getAlarm(alm_id));
+                    db.close();
+                    dialog.dismiss();
+                }
+
+            })
+            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
+            .create();
+        return myQuittingDialogBox;
+
     }
 
 

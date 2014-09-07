@@ -20,5 +20,6 @@
     <string name="stopNormal">Normal</string>
     <string name="stopPuzzle">Puzzle</string>
     <string name="stopMath">Math</string>
+    <string name="addAlarm">Add</string>
 
 </resources>
