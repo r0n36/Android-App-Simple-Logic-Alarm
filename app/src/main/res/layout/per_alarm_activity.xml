@@ -19,7 +19,7 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="55sp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="--:--"
@@ -27,28 +27,29 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:textColor="@android:color/background_light"
-            android:textSize="50dp"
+            android:textSize="35dp"
             android:padding="10sp"
             android:textStyle="bold"
             android:layout_weight="0.89" />
 
         <TextView
-            android:layout_width="56dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="--"
             android:id="@+id/amPmTextView"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
 
         <Switch
-            android:layout_width="123dp"
+            android:layout_width="120sp"
             android:layout_height="wrap_content"
             android:text="alarmOnOff"
             android:id="@+id/alarmOnOff"
             android:textOn="ON"
             android:textOff="OFF"
-            android:checked="false" />
+            android:checked="false"
+            android:layout_gravity="center_vertical|right" />
     </LinearLayout>
     <View
         android:layout_width="fill_parent"

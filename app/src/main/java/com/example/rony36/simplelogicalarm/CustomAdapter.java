@@ -42,6 +42,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         convertView = inflater.inflate(R.layout.per_alarm_activity, parent, false);
 
         final TextView mTimeView = (TextView) convertView.findViewById(R.id.timeTitle);
+        final TextView mAmPm = (TextView) convertView.findViewById(R.id.amPmTextView);
         final Switch mAlarmOnOff = (Switch) convertView.findViewById(R.id.alarmOnOff);
         final CheckBox mRepeatCheck = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
         final ImageView mDrop = (ImageView) convertView.findViewById(R.id.arrowDown);
@@ -52,7 +53,14 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 //        TextView name = (TextView) convertView.findViewById(R.id.textView1);
 //        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
 
-        mTimeView.setText(modelItems.get(position).get_alarm_time());
+        String[] time = modelItems.get(position).get_alarm_time().split(" ");
+        String[] str = time[0].split(":");
+        String formatted_time = time[0];
+        if(str[0].length() == 1){
+            formatted_time = "0" + formatted_time;
+        }
+        mTimeView.setText(formatted_time);
+        mAmPm.setText(time[1]);
         mTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,13 +101,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
-                    mRemoveAlarm.setVisibility(View.VISIBLE);
-                    mUp.setVisibility(View.VISIBLE);
-                    mDrop.setVisibility(View.GONE);
-                    mDetailsLay.setVisibility(View.VISIBLE);
-                    DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
-                    dropDownAnim.setDuration(500);
-                    mDetailsLay.startAnimation(dropDownAnim);
+                    if (mDetailsLay.getVisibility() != View.VISIBLE){
+                        mRemoveAlarm.setVisibility(View.VISIBLE);
+                        mUp.setVisibility(View.VISIBLE);
+                        mDrop.setVisibility(View.GONE);
+                        mDetailsLay.setVisibility(View.VISIBLE);
+                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
+                        dropDownAnim.setDuration(500);
+                        mDetailsLay.startAnimation(dropDownAnim);
+                    }
                 }
             }
         });
