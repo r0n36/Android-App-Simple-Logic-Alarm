@@ -122,49 +122,6 @@ public class MainActivity extends Activity {
     private void populateListView(){
         DatabaseHandler db = new DatabaseHandler(this);
         List<Alarm> all_alarms = db.getAllAlarms();
-//        Cursor alarms = db.getAllAlarms();
-//
-//        startManagingCursor(alarms);
-//        String[] time = new String[]{
-//                DatabaseHandler.KEY_TIME,
-//                DatabaseHandler.KEY_STATUS,
-//                DatabaseHandler.KEY_REPEAT,
-//                DatabaseHandler.KEY_SUN,
-//                DatabaseHandler.KEY_MON,
-//                DatabaseHandler.KEY_TUE,
-//                DatabaseHandler.KEY_WED,
-//                DatabaseHandler.KEY_THU,
-//                DatabaseHandler.KEY_FRI,
-//                DatabaseHandler.KEY_SAT,
-////                DatabaseHandler.KEY_URGENCY,
-////                DatabaseHandler.KEY_OFF_METHOD
-////                DatabaseHandler.KEY_RINGTONE,
-////                DatabaseHandler.KEY_NOTE
-//        };
-//        int[] toViewIDs = new int[]{
-//                R.id.timeTitle,
-//                R.id.alarmOnOff,
-//                R.id.repeatCheckBox,
-//                R.id.sunTextView,
-//                R.id.monTextView,
-//                R.id.tueTextView,
-//                R.id.wedTextView,
-//                R.id.thrTextView,
-//                R.id.friTextView,
-//                R.id.satTextView,
-////                R.id.radioWake,
-////                R.id.radioMethod
-//                //R.id.ringTone,
-////                R.id.note
-//        };
-//
-//        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-//                this,
-//                R.layout.per_alarm_activity,
-//                alarms,
-//                time,
-//                toViewIDs
-//                );
 
         ListView listView = (ListView) findViewById(R.id.allAlarmsView);
         CustomAdapter adapter = new CustomAdapter(this, all_alarms);
@@ -306,33 +263,33 @@ public class MainActivity extends Activity {
         }
     }
 
-    private AlertDialog AskOption(long id){
-        final int alm_id = (int) id;
-        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
-            //set message, title, and icon
-            .setTitle("Delete")
-            .setMessage("Do you want to Delete")
-            //.setIcon(R.drawable.delete)
-
-            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                    db.deleteAlarm(db.getAlarm(alm_id));
-                    db.close();
-                    dialog.dismiss();
-                }
-
-            })
-            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            })
-            .create();
-        return myQuittingDialogBox;
-
-    }
+//    private AlertDialog AskOption(long id){
+//        final int alm_id = (int) id;
+//        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+//            //set message, title, and icon
+//            .setTitle("Delete")
+//            .setMessage("Do you want to Delete")
+//            //.setIcon(R.drawable.delete)
+//
+//            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+//
+//                public void onClick(DialogInterface dialog, int whichButton) {
+//                    DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+//                    db.deleteAlarm(db.getAlarm(alm_id));
+//                    db.close();
+//                    dialog.dismiss();
+//                }
+//
+//            })
+//            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                }
+//            })
+//            .create();
+//        return myQuittingDialogBox;
+//
+//    }
 
 
     @Override
