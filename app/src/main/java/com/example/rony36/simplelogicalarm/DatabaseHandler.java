@@ -129,8 +129,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Getting All Alarms
-//    public List<Alarm> getAllAlarms() {
-    public Cursor getAllAlarms(){
+    public List<Alarm> getAllAlarms() {
+//    public Cursor getAllAlarms(){
         List<Alarm> alarmList = new ArrayList<Alarm>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_LOGIC_ALARM;
@@ -161,10 +161,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 alarmList.add(alarm);
             } while (cursor.moveToNext());
         }
-//        cursor.close();
-        // return alarm list
-//        return alarmList;
-        return cursor;
+        cursor.close();
+//        return alarm list
+        return alarmList;
+//        return cursor;
     }
 
     // Updating single alarm
