@@ -45,7 +45,6 @@ public class MainActivity extends Activity {
     private ImageView mDrop;
     private ImageView mUp;
     private Toast mToast;
-    private TimePickerDialog timePickerDialog;
     private LinearLayout mDetailsLay;
     private Long itemId;
 
@@ -62,60 +61,6 @@ public class MainActivity extends Activity {
 
         populateListView();
     }
-
-    private void openTimePickerDialog(boolean is24r){
-        Calendar calendar = Calendar.getInstance();
-        timePickerDialog = new TimePickerDialog(MainActivity.this, onTimeSetListener,
-                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), is24r);
-
-        timePickerDialog.setTitle("Set Alarm Time");
-        timePickerDialog.show();
-    }
-
-    TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            Calendar calNow = Calendar.getInstance();
-            Calendar calSet = (Calendar) calNow.clone();
-
-            calSet.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calSet.set(Calendar.MINUTE, minute);
-            calSet.set(Calendar.SECOND, 0);
-            calSet.set(Calendar.MILLISECOND, 0);
-
-            if(calSet.compareTo(calNow) <= 0){
-                //Today Set time passed, count to tomorrow
-                calSet.add(Calendar.DATE, 1);
-            }
-            // calSet return Time Difference. Have to user .getTimeInMillis()
-            Integer f24h = calSet.get(Calendar.HOUR_OF_DAY);
-
-            if(calSet.get(Calendar.HOUR_OF_DAY) > 12){
-                f24h = calSet.get(Calendar.HOUR_OF_DAY) -12;
-            }
-
-            String timeForShow = f24h+":"+calSet.get(Calendar.MINUTE);
-            String am_pm;
-            if(calSet.get(Calendar.AM_PM) == 0) {
-                am_pm = "AM";
-            }else{
-                am_pm = "PM";
-            }
-
-            txtToSave = timeForShow+" "+ am_pm;
-
-//            mAlarmOnOff.setChecked(true);
-//
-//            mTimeView.setText(timeForShow);
-//            mAmPmTextView.setText(am_pm);
-
-//            DatabaseHandler db = new DatabaseHandler(getBaseContext());
-//            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
-//            db.close();
-//            setInstantAlarm(calSet);
-        }
-    };
-
 
     private void populateListView(){
         DatabaseHandler db = new DatabaseHandler(this);

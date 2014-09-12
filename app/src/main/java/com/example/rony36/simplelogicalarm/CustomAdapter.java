@@ -3,6 +3,7 @@ package com.example.rony36.simplelogicalarm;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import java.util.Calendar;
@@ -72,7 +74,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         mTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                openTimePickerDialog(false);
+                openTimePickerDialog(false);
             }
         });
 
@@ -242,4 +244,56 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         return myQuittingDialogBox;
 
     }
+    private void openTimePickerDialog(boolean is24r){
+        Calendar calendar = Calendar.getInstance();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener,
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), is24r);
+
+        timePickerDialog.setTitle("Set Alarm Time");
+        timePickerDialog.show();
+    }
+
+    TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Calendar calNow = Calendar.getInstance();
+            Calendar calSet = (Calendar) calNow.clone();
+
+            calSet.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calSet.set(Calendar.MINUTE, minute);
+            calSet.set(Calendar.SECOND, 0);
+            calSet.set(Calendar.MILLISECOND, 0);
+
+            if(calSet.compareTo(calNow) <= 0){
+                //Today Set time passed, count to tomorrow
+                calSet.add(Calendar.DATE, 1);
+            }
+            // calSet return Time Difference. Have to user .getTimeInMillis()
+            Integer f24h = calSet.get(Calendar.HOUR_OF_DAY);
+
+            if(calSet.get(Calendar.HOUR_OF_DAY) > 12){
+                f24h = calSet.get(Calendar.HOUR_OF_DAY) -12;
+            }
+
+            String timeForShow = f24h+":"+calSet.get(Calendar.MINUTE);
+            String am_pm;
+            if(calSet.get(Calendar.AM_PM) == 0) {
+                am_pm = "AM";
+            }else{
+                am_pm = "PM";
+            }
+
+//            txtToSave = timeForShow+" "+ am_pm;
+
+//            mAlarmOnOff.setChecked(true);
+//
+//            mTimeView.setText(timeForShow);
+//            mAmPmTextView.setText(am_pm);
+
+//            DatabaseHandler db = new DatabaseHandler(getBaseContext());
+//            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+//            db.close();
+//            setInstantAlarm(calSet);
+        }
+    };
 }
