@@ -1,5 +1,6 @@
 package com.example.rony36.simplelogicalarm;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -12,9 +13,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -42,12 +45,9 @@ public class MainActivity extends Activity {
     private ImageView mDrop;
     private ImageView mUp;
     private Toast mToast;
-    private TimePickerDialog timePickerDialog;
     private LinearLayout mDetailsLay;
     private Long itemId;
 
-    String STORETEXT="storetext.txt";
-    String OnOffSTATUS = "onOffStatus.txt";
     String txtToSave, status;
     String read_data = null;
     String read_status = null;
@@ -59,65 +59,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseHandler db = new DatabaseHandler(this);
-//        db.addAlarm(new Alarm("1:30 AM",1,1,0,0,0,0,1,0,0,-1,-1,"/","Test"));
         populateListView();
-        db.close();
     }
-
-    private void openTimePickerDialog(boolean is24r){
-        Calendar calendar = Calendar.getInstance();
-        timePickerDialog = new TimePickerDialog(MainActivity.this, onTimeSetListener,
-                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), is24r);
-
-        timePickerDialog.setTitle("Set Alarm Time");
-        timePickerDialog.show();
-    }
-
-    TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-        @Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            Calendar calNow = Calendar.getInstance();
-            Calendar calSet = (Calendar) calNow.clone();
-
-            calSet.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calSet.set(Calendar.MINUTE, minute);
-            calSet.set(Calendar.SECOND, 0);
-            calSet.set(Calendar.MILLISECOND, 0);
-
-            if(calSet.compareTo(calNow) <= 0){
-                //Today Set time passed, count to tomorrow
-                calSet.add(Calendar.DATE, 1);
-            }
-            // calSet return Time Difference. Have to user .getTimeInMillis()
-            Integer f24h = calSet.get(Calendar.HOUR_OF_DAY);
-
-            if(calSet.get(Calendar.HOUR_OF_DAY) > 12){
-                f24h = calSet.get(Calendar.HOUR_OF_DAY) -12;
-            }
-
-            String timeForShow = f24h+":"+calSet.get(Calendar.MINUTE);
-            String am_pm;
-            if(calSet.get(Calendar.AM_PM) == 0) {
-                am_pm = "AM";
-            }else{
-                am_pm = "PM";
-            }
-
-            txtToSave = timeForShow+" "+ am_pm;
-
-//            mAlarmOnOff.setChecked(true);
-//
-//            mTimeView.setText(timeForShow);
-//            mAmPmTextView.setText(am_pm);
-
-//            DatabaseHandler db = new DatabaseHandler(getBaseContext());
-//            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
-//            db.close();
-//            setInstantAlarm(calSet);
-        }
-    };
-
 
     private void populateListView(){
         DatabaseHandler db = new DatabaseHandler(this);
@@ -305,7 +248,11 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.addAlarm) {
+            //Toast.makeText(MainActivity.this, "Keo treat dey na :( ", Toast.LENGTH_SHORT).show();
+            DatabaseHandler db = new DatabaseHandler(this);
+            db.addAlarm(new Alarm("--:-- --",0,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+            db.close();
             return true;
         }
         return super.onOptionsItemSelected(item);
