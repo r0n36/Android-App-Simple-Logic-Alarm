@@ -1,5 +1,6 @@
 package com.example.rony36.simplelogicalarm;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -12,9 +13,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -46,8 +49,6 @@ public class MainActivity extends Activity {
     private LinearLayout mDetailsLay;
     private Long itemId;
 
-    String STORETEXT="storetext.txt";
-    String OnOffSTATUS = "onOffStatus.txt";
     String txtToSave, status;
     String read_data = null;
     String read_status = null;
@@ -59,10 +60,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseHandler db = new DatabaseHandler(this);
-//        db.addAlarm(new Alarm("1:30 AM",1,1,0,0,0,0,1,0,0,-1,-1,"/","Test"));
         populateListView();
-        db.close();
     }
 
     private void openTimePickerDialog(boolean is24r){
@@ -305,7 +303,11 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.addAlarm) {
+            //Toast.makeText(MainActivity.this, "Keo treat dey na :( ", Toast.LENGTH_SHORT).show();
+            DatabaseHandler db = new DatabaseHandler(this);
+            db.addAlarm(new Alarm("--:-- --",0,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+            db.close();
             return true;
         }
         return super.onOptionsItemSelected(item);

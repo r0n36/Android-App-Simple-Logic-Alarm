@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.Calendar;
 import java.util.List;
@@ -48,6 +49,21 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         final ImageView mUp = (ImageView) convertView.findViewById(R.id.arrowUp);
         final LinearLayout mDetailsLay = (LinearLayout) convertView.findViewById(R.id.detailsLay);
         final ImageButton mRemoveAlarm = (ImageButton) convertView.findViewById(R.id.removeAlarm);
+        final ToggleButton mSun = (ToggleButton) convertView.findViewById(R.id.tSun);
+        final ToggleButton mMon = (ToggleButton) convertView.findViewById(R.id.tMon);
+        final ToggleButton mTue = (ToggleButton) convertView.findViewById(R.id.tTue);
+        final ToggleButton mWed = (ToggleButton) convertView.findViewById(R.id.tWed);
+        final ToggleButton mThu = (ToggleButton) convertView.findViewById(R.id.tThr);
+        final ToggleButton mFri = (ToggleButton) convertView.findViewById(R.id.tFri);
+        final ToggleButton mSat = (ToggleButton) convertView.findViewById(R.id.tSat);
+
+        final TextView txtSun = (TextView) convertView.findViewById(R.id.sunTextView);
+        final TextView txtMon = (TextView) convertView.findViewById(R.id.monTextView);
+        final TextView txtTue = (TextView) convertView.findViewById(R.id.tueTextView);
+        final TextView txtWed = (TextView) convertView.findViewById(R.id.wedTextView);
+        final TextView txtThu = (TextView) convertView.findViewById(R.id.thrTextView);
+        final TextView txtFri = (TextView) convertView.findViewById(R.id.friTextView);
+        final TextView txtSat = (TextView) convertView.findViewById(R.id.satTextView);
 
 //        TextView name = (TextView) convertView.findViewById(R.id.textView1);
 //        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
@@ -59,10 +75,61 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 //                openTimePickerDialog(false);
             }
         });
+
         if(modelItems.get(position).get_repeat() == 1)
             mRepeatCheck.setChecked(true);
         else
             mRepeatCheck.setChecked(false);
+
+        if(modelItems.get(position).get_sun() == 1) {
+            mSun.setChecked(true);
+            txtSun.setVisibility(View.VISIBLE);
+        }else {
+            mMon.setChecked(false);
+            txtSun.setVisibility(View.GONE);
+        }
+        if(modelItems.get(position).get_mon() == 1) {
+            mMon.setChecked(true);
+            txtMon.setVisibility(View.VISIBLE);
+        }else{
+            mMon.setChecked(false);
+            txtMon.setVisibility(View.GONE);
+        }
+        if(modelItems.get(position).get_tue() == 1) {
+            mTue.setChecked(true);
+            txtTue.setVisibility(View.VISIBLE);
+        }else{
+            mTue.setChecked(false);
+            txtTue.setVisibility(View.GONE);
+        }
+        if(modelItems.get(position).get_wed() == 1) {
+            mWed.setChecked(true);
+            txtWed.setVisibility(View.VISIBLE);
+        }else{
+            mWed.setChecked(false);
+            txtWed.setVisibility(View.GONE);
+        }
+        if(modelItems.get(position).get_thu() == 1) {
+            mThu.setChecked(true);
+            txtThu.setVisibility(View.VISIBLE);
+        }else {
+            mThu.setChecked(false);
+            txtThu.setVisibility(View.GONE);
+        }
+        if(modelItems.get(position).get_fri() == 1) {
+            mFri.setChecked(true);
+            txtFri.setVisibility(View.VISIBLE);
+        }else{
+            mFri.setChecked(false);
+            txtFri.setVisibility(View.GONE);
+        }
+        if(modelItems.get(position).get_sat() == 1) {
+            mSat.setChecked(true);
+            txtSat.setVisibility(View.VISIBLE);
+        }else{
+            mSat.setChecked(false);
+            txtSat.setVisibility(View.GONE);
+        }
 
         mDrop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +207,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         mRemoveAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog diaBox = AskOption(position);
+                AlertDialog diaBox = AskOption(modelItems.get(position)._id);
                 diaBox.show();
             }
         });
