@@ -22,5 +22,7 @@
     <string name="stopMath">Math</string>
     <string name="addAlarm">Add</string>
     <string name="note">Note:</string>
+    <string name="stopAlarm">Stop Alarm</string>
+    <string name="solveMath">Solve the math:</string>
 
 </resources>

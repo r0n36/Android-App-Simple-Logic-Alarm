@@ -39,20 +39,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
-    private TextView mTimeView, mSat, mSun, mMon, mTue, mWed, mThr, mFri, mAmPmTextView;
-    private Switch mAlarmOnOff;
-    private CheckBox mRepeatCheck;
-    private ImageView mDrop;
-    private ImageView mUp;
     private Toast mToast;
-    private LinearLayout mDetailsLay;
-    private Long itemId;
-
-    String txtToSave, status;
-    String read_data = null;
-    String read_status = null;
-
-    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,64 +57,7 @@ public class MainActivity extends Activity {
         CustomAdapter adapter = new CustomAdapter(this, all_alarms);
         listView.setAdapter(adapter);
 
-//        listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                final TextView mTimeView1 = (TextView) view.findViewById(R.id.timeTitle);
-//                final Switch mAlarmOnOff1 = (Switch) view.findViewById(R.id.alarmOnOff);
-//                final CheckBox mRepeatCheck1 = (CheckBox) view.findViewById(R.id.repeatCheckBox);
-//                final ImageView mDrop1 = (ImageView) view.findViewById(R.id.arrowDown);
-//                final ImageView mUp1 = (ImageView) view.findViewById(R.id.arrowUp);
-//                final LinearLayout mDetailsLay1 = (LinearLayout) view.findViewById(R.id.detailsLay);
-//                final ImageButton mRemoveAlarm = (ImageButton) view.findViewById(R.id.removeAlarm);
-//                itemId = id;
-//
-//                mTimeView1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        openTimePickerDialog(false);
-//                    }
-//                });
-//
-//                mDrop1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mRemoveAlarm.setVisibility(View.VISIBLE);
-//                        mUp1.setVisibility(View.VISIBLE);
-//                        mDrop1.setVisibility(View.GONE);
-//                        mDetailsLay1.setVisibility(View.VISIBLE);
-//                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay1, 500, true);
-//                        dropDownAnim.setDuration(500);
-//                        mDetailsLay1.startAnimation(dropDownAnim);
-//                    }
-//                });
-//
-//                mUp1.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        mRemoveAlarm.setVisibility(View.GONE);
-//                        mUp1.setVisibility(View.GONE);
-//                        mDrop1.setVisibility(View.VISIBLE);
-//                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay1, 500, false);
-//                        dropDownAnim.setDuration(500);
-//                        mDetailsLay1.startAnimation(dropDownAnim);
-//                    }
-//                });
-//
-//                mRepeatCheck1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                        if(isChecked) {
-//                            mRemoveAlarm.setVisibility(View.VISIBLE);
-//                            mUp1.setVisibility(View.VISIBLE);
-//                            mDrop1.setVisibility(View.GONE);
-//                            mDetailsLay1.setVisibility(View.VISIBLE);
-//                            DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay1, 500, true);
-//                            dropDownAnim.setDuration(500);
-//                            mDetailsLay1.startAnimation(dropDownAnim);
-//                        }
-//                    }
-//                });
-//
+
 //                mAlarmOnOff1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                    @Override
 //                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -159,13 +89,6 @@ public class MainActivity extends Activity {
 //                            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 //                            am.cancel(pendingIntent);
 //                        }
-//                    }
-//                });
-//                mRemoveAlarm.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        AlertDialog diaBox = AskOption(itemId);
-//                        diaBox.show();
 //                    }
 //                });
 //            }
@@ -205,35 +128,6 @@ public class MainActivity extends Activity {
             }
         }
     }
-
-//    private AlertDialog AskOption(long id){
-//        final int alm_id = (int) id;
-//        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
-//            //set message, title, and icon
-//            .setTitle("Delete")
-//            .setMessage("Do you want to Delete")
-//            //.setIcon(R.drawable.delete)
-//
-//            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//
-//                public void onClick(DialogInterface dialog, int whichButton) {
-//                    DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-//                    db.deleteAlarm(db.getAlarm(alm_id));
-//                    db.close();
-//                    dialog.dismiss();
-//                }
-//
-//            })
-//            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                }
-//            })
-//            .create();
-//        return myQuittingDialogBox;
-//
-//    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
