@@ -21,8 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -72,17 +74,21 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 //        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
 
         String[] time = modelItems.get(position).get_alarm_time().split(" ");
-        String[] str = time[0].split(":");
-        String formatted_time = time[0];
-        if(str[0].length() == 1){
-            formatted_time = "0" + formatted_time;
+        String formatted_time;
+        if(time[0].equals("--:--")) {
+            formatted_time = "--:--";
+        }else{
+            String[] oTime = time[0].split(":");
+            int hour = Integer.parseInt(oTime[0]);
+            int min = Integer.parseInt(oTime[1]);
+            formatted_time = String.format("%02d", hour) + ":" + String.format("%02d", min);
         }
         mTimeView.setText(formatted_time);
         mAmPm.setText(time[1]);
         mTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimePickerDialog(false);
+                openTimePickerDialog(false, position);
             }
         });
 
@@ -254,15 +260,16 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         return myQuittingDialogBox;
 
     }
-    private void openTimePickerDialog(boolean is24r){
+    private void openTimePickerDialog(boolean is24r, long position){
         Calendar calendar = Calendar.getInstance();
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener,
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), is24r);
-
+        listPosition = (int)position;
         timePickerDialog.setTitle("Set Alarm Time");
         timePickerDialog.show();
     }
 
+    private int listPosition;
     TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -285,7 +292,11 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 f24h = calSet.get(Calendar.HOUR_OF_DAY) -12;
             }
 
-            String timeForShow = f24h+":"+calSet.get(Calendar.MINUTE);
+            DecimalFormat formatter = new DecimalFormat("00");
+            String formattedHour = formatter.format(f24h);
+            String formattedMin = formatter.format(calSet.get(Calendar.MINUTE));
+
+            String timeForShow = formattedHour+":"+formattedMin;
             String am_pm;
             if(calSet.get(Calendar.AM_PM) == 0) {
                 am_pm = "AM";
@@ -293,16 +304,18 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 am_pm = "PM";
             }
 
-//            txtToSave = timeForShow+" "+ am_pm;
+            String txtToSave = timeForShow+" "+ am_pm;
 
-//            mAlarmOnOff.setChecked(true);
-//
-//            mTimeView.setText(timeForShow);
-//            mAmPmTextView.setText(am_pm);
+            DatabaseHandler db = new DatabaseHandler(getContext());
+            Alarm alm = db.getAlarm(modelItems.get(listPosition)._id);
+            alm._alarm_time = txtToSave;
+            db.updateAlarm(alm);
+            db.close();
 
-//            DatabaseHandler db = new DatabaseHandler(getBaseContext());
-//            db.addAlarm(new Alarm(txtToSave,1,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
-//            db.close();
+            Alarm alteredAlarm = modelItems.get(listPosition);
+            alteredAlarm._alarm_time = txtToSave;
+            modelItems.set(listPosition, alteredAlarm);
+            notifyDataSetChanged();
 //            setInstantAlarm(calSet);
         }
     };
