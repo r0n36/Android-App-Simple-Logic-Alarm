@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.app.Activity;
 import android.content.Context;
@@ -91,6 +92,11 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 openTimePickerDialog(false, position);
             }
         });
+
+        if(modelItems.get(position).get_status() == 1)
+            mAlarmOnOff.setChecked(true);
+        else
+            mAlarmOnOff.setChecked(false);
 
         if(modelItems.get(position).get_repeat() == 1)
             mRepeatCheck.setChecked(true);
@@ -309,14 +315,36 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             DatabaseHandler db = new DatabaseHandler(getContext());
             Alarm alm = db.getAlarm(modelItems.get(listPosition)._id);
             alm._alarm_time = txtToSave;
+            alm._status = 1;
             db.updateAlarm(alm);
             db.close();
 
             Alarm alteredAlarm = modelItems.get(listPosition);
             alteredAlarm._alarm_time = txtToSave;
+            alteredAlarm._status = 1;
             modelItems.set(listPosition, alteredAlarm);
+
             notifyDataSetChanged();
-//            setInstantAlarm(calSet);
+            setInstantAlarm(calSet, listPosition);
         }
     };
+    private void setInstantAlarm(Calendar timeFromNow, int pos){
+        try{
+            Intent intent = new Intent(context, AlarmReceiverActivity.class);
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(context, pos, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            am.set(AlarmManager.RTC_WAKEUP, timeFromNow.getTimeInMillis(), pendingIntent);
+
+
+            String time = String.format("%d hours, %d minutes and %d seconds\n",
+                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60 * 60),
+                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60), (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / 1000
+            );
+
+            Toast.makeText(context, "Alarm Set to "+time+" hours from now", Toast.LENGTH_SHORT).show();
+        }catch (NumberFormatException e){
+            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

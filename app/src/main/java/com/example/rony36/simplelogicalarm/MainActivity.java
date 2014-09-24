@@ -97,38 +97,6 @@ public class MainActivity extends Activity {
         db.close();
     }
 
-    private void setInstantAlarm(Calendar timeFromNow){
-        try{
-            Intent intent = new Intent(MainActivity.this, AlarmReceiverActivity.class);
-            PendingIntent pendingIntent =
-                    PendingIntent.getActivity(MainActivity.this, 2, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, timeFromNow.getTimeInMillis(), pendingIntent);
-
-            if (mToast != null){
-                mToast.cancel();
-            }
-
-
-            String time = String.format("%d hours, %d minutes and %d seconds\n",
-                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60 * 60),
-                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60), (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / 1000
-            );
-
-            mToast = Toast.makeText(getApplicationContext(),
-                    "Alarm Set for " +time+" from now",
-                    Toast.LENGTH_LONG);
-            mToast.show();
-        }catch (NumberFormatException e){
-            if (mToast != null){
-                mToast.cancel();
-                mToast = Toast.makeText(MainActivity.this, "Please enter some Number", Toast.LENGTH_LONG);
-                mToast.show();
-                Log.i("MainActivity", "Number Format exception");
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
