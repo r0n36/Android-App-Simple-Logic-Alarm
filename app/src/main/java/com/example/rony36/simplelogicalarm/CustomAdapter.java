@@ -198,7 +198,8 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         mAlarmOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(isChecked){
+                if(isChecked){
+                    Toast.makeText(context, "Nothing to do in here!", Toast.LENGTH_SHORT).show();
 //                    status = "ON";
 //                    String[] date_str = read_data.split(" ");
 //                    String[] coreTime = date_str[0].split(":");
@@ -219,13 +220,19 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 //                    }
 //
 //                    setInstantAlarm(calSet);
-//                }else{
-//                    status = "OFF";
-//                    Intent intent = new Intent(MainActivity.this, AlarmReceiverActivity.class);
-//                    PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 3, intent, 0);
-//                    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                    am.cancel(pendingIntent);
-//                }
+                }else{
+                    int mIntent = modelItems.get(position).get_status();
+                    Intent intent = new Intent(context, AlarmReceiverActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, mIntent, intent, 0);
+                    AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    am.cancel(pendingIntent);
+
+                    DatabaseHandler db = new DatabaseHandler(getContext());
+                    Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                    alm._status = 0;
+                    db.updateAlarm(alm);
+                    db.close();
+                }
             }
         });
         mRemoveAlarm.setOnClickListener(new View.OnClickListener() {
