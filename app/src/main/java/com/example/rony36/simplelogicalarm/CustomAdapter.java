@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.app.Activity;
@@ -20,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -48,14 +51,26 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         convertView = inflater.inflate(R.layout.per_alarm_activity, parent, false);
 
-        final TextView mTimeView = (TextView) convertView.findViewById(R.id.timeTitle);
-        final TextView mAmPm = (TextView) convertView.findViewById(R.id.amPmTextView);
-        final Switch mAlarmOnOff = (Switch) convertView.findViewById(R.id.alarmOnOff);
-        final CheckBox mRepeatCheck = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
-        final ImageView mDrop = (ImageView) convertView.findViewById(R.id.arrowDown);
-        final ImageView mUp = (ImageView) convertView.findViewById(R.id.arrowUp);
-        final LinearLayout mDetailsLay = (LinearLayout) convertView.findViewById(R.id.detailsLay);
-        final ImageButton mRemoveAlarm = (ImageButton) convertView.findViewById(R.id.removeAlarm);
+        final TextView mTimeView        = (TextView) convertView.findViewById(R.id.timeTitle);
+        final TextView mAmPm            = (TextView) convertView.findViewById(R.id.amPmTextView);
+        final Switch mAlarmOnOff        = (Switch) convertView.findViewById(R.id.alarmOnOff);
+        final CheckBox mRepeatCheck     = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
+        final ImageView mDrop           = (ImageView) convertView.findViewById(R.id.arrowDown);
+        final ImageView mUp             = (ImageView) convertView.findViewById(R.id.arrowUp);
+        final LinearLayout mDetailsLay  = (LinearLayout) convertView.findViewById(R.id.detailsLay);
+        final ImageButton mRemoveAlarm  = (ImageButton) convertView.findViewById(R.id.removeAlarm);
+
+        final RadioGroup mUrgencyGrp    = (RadioGroup) convertView.findViewById(R.id.radioWake);
+        final RadioGroup mMethodGrp     = (RadioGroup) convertView.findViewById(R.id.radioMethod);
+
+        final RadioButton mWakeLow      = (RadioButton) convertView.findViewById(R.id.wakeLow);
+        final RadioButton mWakeMedium   = (RadioButton) convertView.findViewById(R.id.wakeMedium);
+        final RadioButton mWakeHigh     = (RadioButton) convertView.findViewById(R.id.wakeHigh);
+
+        final RadioButton mMethodNormal = (RadioButton) convertView.findViewById(R.id.methodNormal);
+        final RadioButton mMethodPuzzle = (RadioButton) convertView.findViewById(R.id.methodPuzzle);
+        final RadioButton mMethodMath   = (RadioButton) convertView.findViewById(R.id.methodMath);
+
         final ToggleButton mSun = (ToggleButton) convertView.findViewById(R.id.tSun);
         final ToggleButton mMon = (ToggleButton) convertView.findViewById(R.id.tMon);
         final ToggleButton mTue = (ToggleButton) convertView.findViewById(R.id.tTue);
@@ -74,17 +89,66 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 
         final TextView mNoteTitle = (TextView) convertView.findViewById(R.id.noteTitle);
 
-//        TextView name = (TextView) convertView.findViewById(R.id.textView1);
-//        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
+
+        if(modelItems.get(position).get_urgency() == -1){
+            mUrgencyGrp.check(mWakeLow.getId());
+        }else if (modelItems.get(position).get_urgency() == 0){
+            mUrgencyGrp.check(mWakeMedium.getId());
+        }else{
+            mUrgencyGrp.check(mWakeHigh.getId());
+        }
+
+        if(modelItems.get(position).get_off_method() == -1){
+            mMethodGrp.check(mMethodNormal.getId());
+        }else if (modelItems.get(position).get_off_method() == 0){
+            mUrgencyGrp.check(mMethodPuzzle.getId());
+        }else{
+            mUrgencyGrp.check(mMethodMath.getId());
+        }
+
+        mUrgencyGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //Toast.makeText(context, checkedId, Toast.LENGTH_SHORT).show();
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if(mWakeLow.isChecked()) {
+                    alm._urgency = -1;
+                }else if(mWakeMedium.isChecked()){
+                    alm._urgency = 0;
+                }else if(mWakeHigh.isChecked()){
+                    alm._urgency = 1;
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mMethodGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //Toast.makeText(context, checkedId, Toast.LENGTH_SHORT).show();
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if(mMethodNormal.isChecked()) {
+                    alm._off_method = -1;
+                }else if(mMethodPuzzle.isChecked()){
+                    alm._off_method = 0;
+                }else if(mMethodMath.isChecked()){
+                    alm._off_method = 1;
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
 
         mNoteTitle.setText(modelItems.get(position).get_note());
-
         mNoteTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final EditText titleInput = new EditText(context);
 
-                // Set the default text to a link of the Queen
                 titleInput.setHint("Enter a note or title");
 
                 new AlertDialog.Builder(context)
@@ -94,7 +158,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                         .setPositiveButton("Set", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String title = titleInput.getText().toString();
-                                //Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, titleInput, Toast.LENGTH_SHORT).show();
                                 mNoteTitle.setText(title);
                                 DatabaseHandler db = new DatabaseHandler(getContext());
                                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
@@ -303,6 +367,12 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             }
         });
 
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        double mHeight = height - (height * 0.6);
+        final int targetHeight = (int) Math.round(mHeight);
 
         mDrop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,7 +381,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 mUp.setVisibility(View.VISIBLE);
                 mDrop.setVisibility(View.GONE);
                 mDetailsLay.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 435, true);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, true);
                 dropDownAnim.setDuration(500);
                 mDetailsLay.startAnimation(dropDownAnim);
             }
@@ -323,7 +393,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 mRemoveAlarm.setVisibility(View.GONE);
                 mUp.setVisibility(View.GONE);
                 mDrop.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 435, false);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, false);
                 dropDownAnim.setDuration(500);
                 mDetailsLay.startAnimation(dropDownAnim);
             }
@@ -338,7 +408,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                         mUp.setVisibility(View.VISIBLE);
                         mDrop.setVisibility(View.GONE);
                         mDetailsLay.setVisibility(View.VISIBLE);
-                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 435, true);
+                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, true);
                         dropDownAnim.setDuration(500);
                         mDetailsLay.startAnimation(dropDownAnim);
                     }
@@ -351,6 +421,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     Toast.makeText(context, "Nothing to do in here!", Toast.LENGTH_SHORT).show();
+
                     // status = "ON";
                     // String[] date_str = read_data.split(" ");
                     // String[] coreTime = date_str[0].split(":");
