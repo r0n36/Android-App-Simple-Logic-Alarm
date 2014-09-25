@@ -113,7 +113,7 @@ public class MainActivity extends Activity {
         if (id == R.id.addAlarm) {
             //Toast.makeText(MainActivity.this, "Keo treat dey na :( ", Toast.LENGTH_SHORT).show();
             DatabaseHandler db = new DatabaseHandler(this);
-            db.addAlarm(new Alarm("--:-- --",0,0,0,0,0,0,0,0,0,-1,-1,"/","Test"));
+            db.addAlarm(new Alarm("--:-- --",0,0,0,0,0,0,0,0,0,-1,-1,"/","Alarm "+id));
             db.close();
             return true;
         }

@@ -51,6 +51,24 @@
             android:checked="false"
             android:layout_gravity="center_vertical|right" />
     </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_alignBottom="@id/linearLayout"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
+        android:layout_above="@+id/view"
+        android:layout_alignParentRight="false"
+        android:gravity="right">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="@string/hello_world"
+            android:textColor="#ffffffff"
+            android:id="@+id/noteTitle"
+            android:textStyle="bold"
+            android:layout_gravity="right" />
+        </LinearLayout>
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
@@ -71,83 +89,97 @@
         android:animateLayoutChanges="true">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50sp">
-            <CheckBox
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="50sp"
-                android:text="@string/repeat"
-                android:id="@+id/repeatCheckBox"
-                android:longClickable="false"
-                android:textColor="@android:color/background_light"
-                android:paddingTop="15sp"
-                android:paddingRight="15sp"
-                android:paddingLeft="1sp"
-                android:layout_gravity="top"
-                android:paddingBottom="15sp" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:gravity="top"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/sat"
-                android:id="@+id/satTextView"
-                android:textColor="@android:color/holo_orange_light" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/sun"
-                android:id="@+id/sunTextView"
-                android:textColor="@android:color/holo_orange_light"
-                android:gravity="top" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/mon"
-                android:id="@+id/monTextView"
-                android:textColor="@android:color/holo_orange_light"
-                android:gravity="top" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/tue"
-                android:id="@+id/tueTextView"
-                android:textColor="@android:color/holo_orange_light"
-                android:gravity="top" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/wed"
-                android:id="@+id/wedTextView"
-                android:textColor="@android:color/holo_orange_light"
-                android:gravity="top" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/thr"
-                android:id="@+id/thrTextView"
-                android:textColor="@android:color/holo_orange_light"
-                android:gravity="top" />
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="20sp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/fri"
-                android:id="@+id/friTextView"
-                android:gravity="top"
-                android:textColor="@android:color/holo_orange_light" />
-            <ImageButton
-                android:id="@+id/removeAlarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:background="@android:drawable/ic_menu_delete"/>
+                android:layout_height="50sp">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="50sp"
+                    android:text="@string/repeat"
+                    android:id="@+id/repeatCheckBox"
+                    android:longClickable="false"
+                    android:textColor="@android:color/background_light"
+                    android:paddingTop="15sp"
+                    android:paddingRight="15sp"
+                    android:paddingLeft="1sp"
+                    android:layout_gravity="top"
+                    android:paddingBottom="15sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:gravity="top"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/sat"
+                    android:id="@+id/satTextView"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/sun"
+                    android:id="@+id/sunTextView"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="top"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/mon"
+                    android:id="@+id/monTextView"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="top"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/tue"
+                    android:id="@+id/tueTextView"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="top"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/wed"
+                    android:id="@+id/wedTextView"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="top"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/thr"
+                    android:id="@+id/thrTextView"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:gravity="top"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/fri"
+                    android:id="@+id/friTextView"
+                    android:gravity="top"
+                    android:textColor="@android:color/holo_orange_light"
+                    android:paddingLeft="4sp"
+                    android:paddingRight="4sp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -170,12 +202,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginBottom="10sp">
+            android:visibility="gone">
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center">
 
                 <ToggleButton
                     android:layout_width="45sp"
@@ -242,9 +274,9 @@
                     android:layout_gravity="center_horizontal|left|top" />
             </LinearLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="15sp">
                 <TextView
                     android:layout_width="wrap_content"
@@ -252,11 +284,13 @@
                     android:text="@string/wake"
                     android:textStyle="bold"
                     android:textColor="@android:color/background_light"
-                    android:layout_margin="5sp" />
+                    android:layout_margin="5sp"
+                    android:layout_gravity="center_horizontal" />
 
                 <RadioGroup
                     android:id="@+id/radioWake"
                     android:layout_width="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_height="wrap_content" >
 
                     <RadioButton
@@ -282,9 +316,9 @@
                 </RadioGroup>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="15sp">
                 <TextView
                     android:layout_width="wrap_content"
@@ -292,9 +326,11 @@
                     android:text="@string/method"
                     android:textStyle="bold"
                     android:textColor="@android:color/background_light"
-                    android:layout_margin="5sp" />
+                    android:layout_margin="5sp"
+                    android:layout_gravity="center_horizontal" />
                 <RadioGroup
                     android:id="@+id/radioMethod"
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
 
@@ -320,6 +356,27 @@
                         android:text="@string/stopMath" />
                 </RadioGroup>
             </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center|right">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="Remove Alarm"
+                    android:layout_gravity="right"
+                    android:textStyle="italic"
+                    android:textIsSelectable="false"
+                    android:textColor="#ffffff"
+                    android:gravity="center_vertical" />
+                <ImageButton
+                    android:id="@+id/removeAlarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:background="@android:drawable/ic_menu_delete"/>
+                </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

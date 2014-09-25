@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,8 +72,44 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         final TextView txtFri = (TextView) convertView.findViewById(R.id.friTextView);
         final TextView txtSat = (TextView) convertView.findViewById(R.id.satTextView);
 
+        final TextView mNoteTitle = (TextView) convertView.findViewById(R.id.noteTitle);
+
 //        TextView name = (TextView) convertView.findViewById(R.id.textView1);
 //        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox1);
+
+        mNoteTitle.setText(modelItems.get(position).get_note());
+
+        mNoteTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText titleInput = new EditText(context);
+
+                // Set the default text to a link of the Queen
+                titleInput.setHint("Enter a note or title");
+
+                new AlertDialog.Builder(context)
+                        .setTitle("Set Title")
+                        .setMessage("Alarm Note")
+                        .setView(titleInput)
+                        .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String title = titleInput.getText().toString();
+                                //Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+                                mNoteTitle.setText(title);
+                                DatabaseHandler db = new DatabaseHandler(getContext());
+                                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                                alm._note = title;
+                                db.updateAlarm(alm);
+                                db.close();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        })
+                        .show();
+            }
+        });
 
         String[] time = modelItems.get(position).get_alarm_time().split(" ");
         String formatted_time;
@@ -108,50 +145,164 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             txtSun.setVisibility(View.VISIBLE);
         }else {
             mMon.setChecked(false);
-            txtSun.setVisibility(View.GONE);
+            txtSun.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_mon() == 1) {
             mMon.setChecked(true);
             txtMon.setVisibility(View.VISIBLE);
         }else{
             mMon.setChecked(false);
-            txtMon.setVisibility(View.GONE);
+            txtMon.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_tue() == 1) {
             mTue.setChecked(true);
             txtTue.setVisibility(View.VISIBLE);
         }else{
             mTue.setChecked(false);
-            txtTue.setVisibility(View.GONE);
+            txtTue.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_wed() == 1) {
             mWed.setChecked(true);
             txtWed.setVisibility(View.VISIBLE);
         }else{
             mWed.setChecked(false);
-            txtWed.setVisibility(View.GONE);
+            txtWed.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_thu() == 1) {
             mThu.setChecked(true);
             txtThu.setVisibility(View.VISIBLE);
         }else {
             mThu.setChecked(false);
-            txtThu.setVisibility(View.GONE);
+            txtThu.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_fri() == 1) {
             mFri.setChecked(true);
             txtFri.setVisibility(View.VISIBLE);
         }else{
             mFri.setChecked(false);
-            txtFri.setVisibility(View.GONE);
+            txtFri.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_sat() == 1) {
             mSat.setChecked(true);
             txtSat.setVisibility(View.VISIBLE);
         }else{
             mSat.setChecked(false);
-            txtSat.setVisibility(View.GONE);
+            txtSat.setVisibility(View.INVISIBLE);
         }
+
+        mSun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._sun = 1;
+                    txtSun.setVisibility(View.VISIBLE);
+                }else{
+                    alm._sun = 0;
+                    txtSun.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mMon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._mon = 1;
+                    txtMon.setVisibility(View.VISIBLE);
+                }else{
+                    alm._mon = 0;
+                    txtMon.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mTue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._tue = 1;
+                    txtTue.setVisibility(View.VISIBLE);
+                }else{
+                    alm._tue = 0;
+                    txtTue.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mWed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._wed = 1;
+                    txtWed.setVisibility(View.VISIBLE);
+                }else{
+                    alm._wed = 0;
+                    txtWed.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mThu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._thu = 1;
+                    txtThu.setVisibility(View.VISIBLE);
+                }else{
+                    alm._thu = 0;
+                    txtThu.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mFri.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._fri = 1;
+                    txtFri.setVisibility(View.VISIBLE);
+                }else{
+                    alm._fri = 0;
+                    txtFri.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mSat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if (isChecked) {
+                    alm._sat = 1;
+                    txtSat.setVisibility(View.VISIBLE);
+                }else{
+                    alm._sat = 0;
+                    txtSat.setVisibility(View.INVISIBLE);
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+
 
         mDrop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +311,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 mUp.setVisibility(View.VISIBLE);
                 mDrop.setVisibility(View.GONE);
                 mDetailsLay.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 435, true);
                 dropDownAnim.setDuration(500);
                 mDetailsLay.startAnimation(dropDownAnim);
             }
@@ -172,7 +323,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 mRemoveAlarm.setVisibility(View.GONE);
                 mUp.setVisibility(View.GONE);
                 mDrop.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, false);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 435, false);
                 dropDownAnim.setDuration(500);
                 mDetailsLay.startAnimation(dropDownAnim);
             }
@@ -187,7 +338,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                         mUp.setVisibility(View.VISIBLE);
                         mDrop.setVisibility(View.GONE);
                         mDetailsLay.setVisibility(View.VISIBLE);
-                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 500, true);
+                        DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, 435, true);
                         dropDownAnim.setDuration(500);
                         mDetailsLay.startAnimation(dropDownAnim);
                     }
@@ -200,26 +351,26 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     Toast.makeText(context, "Nothing to do in here!", Toast.LENGTH_SHORT).show();
-//                    status = "ON";
-//                    String[] date_str = read_data.split(" ");
-//                    String[] coreTime = date_str[0].split(":");
-//                    Integer dHour = date_str[1].toCharArray()[0] == 'P' ? Integer.parseInt(coreTime[0])+12 : Integer.parseInt(coreTime[0]);
-//                    //Integer milliTime = dHour * 1000 + Integer.parseInt(coreTime[1])* 1000;
-//
-//                    Calendar calNow = Calendar.getInstance();
-//                    Calendar calSet = (Calendar) calNow.clone();
-//
-//                    calSet.set(Calendar.HOUR_OF_DAY, dHour);
-//                    calSet.set(Calendar.MINUTE, Integer.parseInt(coreTime[1]));
-//                    calSet.set(Calendar.SECOND, 0);
-//                    calSet.set(Calendar.MILLISECOND, 0);
-//
-//                    if(calSet.compareTo(calNow) <= 0){
-//                        //Today Set time passed, count to tomorrow
-//                        calSet.add(Calendar.DATE, 1);
-//                    }
-//
-//                    setInstantAlarm(calSet);
+                    // status = "ON";
+                    // String[] date_str = read_data.split(" ");
+                    // String[] coreTime = date_str[0].split(":");
+                    // Integer dHour = date_str[1].toCharArray()[0] == 'P' ? Integer.parseInt(coreTime[0])+12 : Integer.parseInt(coreTime[0]);
+                    //Integer milliTime = dHour * 1000 + Integer.parseInt(coreTime[1])* 1000;
+                    //
+                    // Calendar calNow = Calendar.getInstance();
+                    // Calendar calSet = (Calendar) calNow.clone();
+                    //
+                    // calSet.set(Calendar.HOUR_OF_DAY, dHour);
+                    // calSet.set(Calendar.MINUTE, Integer.parseInt(coreTime[1]));
+                    // calSet.set(Calendar.SECOND, 0);
+                    // calSet.set(Calendar.MILLISECOND, 0);
+                    //
+                    // if(calSet.compareTo(calNow) <= 0){
+                    //     //Today Set time passed, count to tomorrow
+                    //     calSet.add(Calendar.DATE, 1);
+                    // }
+                    //
+                    // setInstantAlarm(calSet);
                 }else{
                     int mIntent = modelItems.get(position).get_status();
                     Intent intent = new Intent(context, AlarmReceiverActivity.class);
