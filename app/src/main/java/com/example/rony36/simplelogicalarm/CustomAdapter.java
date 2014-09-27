@@ -94,16 +94,16 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             mUrgencyGrp.check(mWakeLow.getId());
         }else if (modelItems.get(position).get_urgency() == 0){
             mUrgencyGrp.check(mWakeMedium.getId());
-        }else{
+        }else if (modelItems.get(position).get_urgency() == 1){
             mUrgencyGrp.check(mWakeHigh.getId());
         }
 
         if(modelItems.get(position).get_off_method() == -1){
             mMethodGrp.check(mMethodNormal.getId());
         }else if (modelItems.get(position).get_off_method() == 0){
-            mUrgencyGrp.check(mMethodPuzzle.getId());
-        }else{
-            mUrgencyGrp.check(mMethodMath.getId());
+            mMethodGrp.check(mMethodPuzzle.getId());
+        }else if(modelItems.get(position).get_off_method() == 1){
+            mMethodGrp.check(mMethodMath.getId());
         }
 
         mUrgencyGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -443,7 +443,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     //
                     // setInstantAlarm(calSet);
                 }else{
-                    int mIntent = modelItems.get(position).get_status();
+                    int mIntent = modelItems.get(position).get_id();
                     Intent intent = new Intent(context, AlarmReceiverActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, mIntent, intent, 0);
                     AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -554,12 +554,13 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             modelItems.set(listPosition, alteredAlarm);
 
             notifyDataSetChanged();
-            setInstantAlarm(calSet, listPosition);
+            setInstantAlarm(calSet, modelItems.get(listPosition)._id);
         }
     };
     private void setInstantAlarm(Calendar timeFromNow, int pos){
         try{
             Intent intent = new Intent(context, AlarmReceiverActivity.class);
+            intent.putExtra("requestCode", pos);
             PendingIntent pendingIntent =
                     PendingIntent.getActivity(context, pos, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -571,7 +572,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60), (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / 1000
             );
 
-            Toast.makeText(context, "Alarm Set to "+time+" hours from now", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Alarm Set to "+time+" from now", Toast.LENGTH_SHORT).show();
         }catch (NumberFormatException e){
             Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }

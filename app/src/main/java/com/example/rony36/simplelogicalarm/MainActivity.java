@@ -56,43 +56,6 @@ public class MainActivity extends Activity {
         ListView listView = (ListView) findViewById(R.id.allAlarmsView);
         CustomAdapter adapter = new CustomAdapter(this, all_alarms);
         listView.setAdapter(adapter);
-
-
-//                mAlarmOnOff1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                        if(isChecked){
-//                            status = "ON";
-//                            String[] date_str = read_data.split(" ");
-//                            String[] coreTime = date_str[0].split(":");
-//                            Integer dHour = date_str[1].toCharArray()[0] == 'P' ? Integer.parseInt(coreTime[0])+12 : Integer.parseInt(coreTime[0]);
-//                            //Integer milliTime = dHour * 1000 + Integer.parseInt(coreTime[1])* 1000;
-//
-//                            Calendar calNow = Calendar.getInstance();
-//                            Calendar calSet = (Calendar) calNow.clone();
-//
-//                            calSet.set(Calendar.HOUR_OF_DAY, dHour);
-//                            calSet.set(Calendar.MINUTE, Integer.parseInt(coreTime[1]));
-//                            calSet.set(Calendar.SECOND, 0);
-//                            calSet.set(Calendar.MILLISECOND, 0);
-//
-//                            if(calSet.compareTo(calNow) <= 0){
-//                                //Today Set time passed, count to tomorrow
-//                                calSet.add(Calendar.DATE, 1);
-//                            }
-//
-//                            setInstantAlarm(calSet);
-//                        }else{
-//                            status = "OFF";
-//                            Intent intent = new Intent(MainActivity.this, AlarmReceiverActivity.class);
-//                            PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 3, intent, 0);
-//                            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                            am.cancel(pendingIntent);
-//                        }
-//                    }
-//                });
-//            }
-//        });
         adapter.notifyDataSetChanged();
         db.close();
     }
