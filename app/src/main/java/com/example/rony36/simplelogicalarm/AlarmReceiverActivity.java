@@ -16,11 +16,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by RonyLap on 8/30/2014.
@@ -95,10 +98,15 @@ public class AlarmReceiverActivity extends Activity {
         final LinearLayout mMid = (LinearLayout) findViewById(R.id.midStop);
         final LinearLayout mHigh = (LinearLayout) findViewById(R.id.hiStop);
 
+        final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
+        final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
+
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
            mMid.setVisibility(View.GONE);
            mHigh.setVisibility(View.VISIBLE);
+
+           mEquation.setText(generateMath(ringingAlarm.get_urgency()));
         }else if (ringingAlarm.get_off_method() == 0){
             mSimple.setVisibility(View.GONE);
             mMid.setVisibility(View.VISIBLE);
@@ -107,6 +115,56 @@ public class AlarmReceiverActivity extends Activity {
 
         db.close();
         playSound(this, getAlarmUri());
+    }
+
+    public String mEquation;
+    public int mResult;
+
+    public String generateMath(int difficulty){
+        int min, max;
+        if(difficulty == -1){
+            min = 1;
+            max = 10;
+        }else if(difficulty == 0){
+            min = 10;
+            max = 99;
+        }else{
+            min = 100;
+            max = 99;
+        }
+
+        Random r1 = new Random();
+        int i1 = r1.nextInt(max - min) + min;
+        Random r2 = new Random();
+        int i2 = r2.nextInt(max - min) + min;
+        Random r3 = new Random();
+        int i3 = r3.nextInt(max - min) + min;
+
+        String op1 = randOperator();
+        String op2 = randOperator();
+
+        mEquation = i1 + " " + op1 + " " + i2 + " " + op2 + " " + i3;
+
+        mResult = 0;
+
+        if(op1 == "+"){
+            mResult = i1 + i2;
+        }else{
+            mResult = i1 - i2;
+        }
+
+        if(op2 == "+"){
+            mResult += i3;
+        }else{
+            mResult -= i3;
+        }
+        return mEquation;
+    }
+
+    private String randOperator(){
+        String[] operators = {"+","-"};
+        int idx = new Random().nextInt(operators.length);
+        return operators[idx];
     }
 
     private  void playSound(Context context, Uri alert){
