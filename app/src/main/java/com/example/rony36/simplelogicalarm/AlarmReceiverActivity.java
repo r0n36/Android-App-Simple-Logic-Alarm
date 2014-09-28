@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -54,29 +55,6 @@ public class AlarmReceiverActivity extends Activity {
         Button stopAlarm = (Button) findViewById(R.id.btnStopAlarm);
         Button stopMidAlarm = (Button) findViewById(R.id.midBtnStopAlarm);
         Button stopHighAlarm = (Button) findViewById(R.id.hiBtnStopAlarm);
-
-        stopAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.stop();
-                finish();
-            }
-        });
-        stopMidAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.stop();
-                finish();
-            }
-        });
-        stopHighAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.stop();
-                finish();
-            }
-        });
-
 //        String newString;
 //        Bundle extras;
 //        if (saveInstanceState == null) {
@@ -115,6 +93,32 @@ public class AlarmReceiverActivity extends Activity {
 
         db.close();
         playSound(this, getAlarmUri());
+
+        stopAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMediaPlayer.stop();
+                finish();
+            }
+        });
+        stopMidAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMediaPlayer.stop();
+                finish();
+            }
+        });
+        stopHighAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mEnterRes.getText().toString().equals(Integer.toString(mResult))){
+                    mMediaPlayer.stop();
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Oh! Dear! It's not correct. Wake up and Try again!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public String mEquation;

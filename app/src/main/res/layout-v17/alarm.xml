@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stopAlarm"
-            android:id="@+id/hiBtnStopAlarm"
+            android:id="@+id/midBtnStopAlarm"
             android:layout_gravity="center" />
     </LinearLayout>
     <LinearLayout
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stopAlarm"
-            android:id="@+id/midBtnStopAlarm"
+            android:id="@+id/hiBtnStopAlarm"
             android:layout_gravity="center" />
     </LinearLayout>
 </LinearLayout>
