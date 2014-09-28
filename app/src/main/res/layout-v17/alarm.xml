@@ -84,11 +84,13 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberDecimal|numberSigned"
             android:ems="10"
             android:id="@+id/enterRes"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30sp" />
+            android:layout_marginBottom="30sp"
+            android:textStyle="bold"
+            android:textAlignment="center" />
 
         <Button
             android:layout_width="wrap_content"
