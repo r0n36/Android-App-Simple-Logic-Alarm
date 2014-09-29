@@ -68,6 +68,15 @@ public class AlarmReceiverActivity extends Activity {
 //            newString= (String) saveInstanceState.getSerializable("requestCode");
 //        }
 //        Serializable abc = getIntent().getExtras().getSerializable("requestCode");
+
+        TextView mDummy = (TextView) findViewById(R.id.dummyPuzzle);
+
+        String wordList = "Love Fear Wake Hate Good Bad Shine";
+        String[] list = wordList.split(" ");
+        WordHunt w = new WordHunt(list, 10);
+
+        mDummy.setText(w.toString());
+
         int rowId = getIntent().getIntExtra("requestCode", 1);
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         Alarm ringingAlarm = db.getAlarm(rowId);
