@@ -195,7 +195,7 @@ public class AlarmReceiverActivity extends Activity {
             max = 99;
         }else{
             min = 100;
-            max = 99;
+            max = 999;
         }
 
         Random r1 = new Random();

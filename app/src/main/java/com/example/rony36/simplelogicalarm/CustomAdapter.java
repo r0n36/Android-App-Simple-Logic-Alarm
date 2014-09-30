@@ -261,6 +261,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._sun = 1;
+                    alm._repeat = 1;
                     txtSun.setVisibility(View.VISIBLE);
                 }else{
                     alm._sun = 0;
@@ -277,9 +278,11 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._mon = 1;
+                    alm._repeat = 1;
                     txtMon.setVisibility(View.VISIBLE);
                 }else{
                     alm._mon = 0;
+                    alm._repeat = 1;
                     txtMon.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
@@ -293,6 +296,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._tue = 1;
+                    alm._repeat = 1;
                     txtTue.setVisibility(View.VISIBLE);
                 }else{
                     alm._tue = 0;
@@ -325,6 +329,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._thu = 1;
+                    alm._repeat = 1;
                     txtThu.setVisibility(View.VISIBLE);
                 }else{
                     alm._thu = 0;
@@ -341,6 +346,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._fri = 1;
+                    alm._repeat = 1;
                     txtFri.setVisibility(View.VISIBLE);
                 }else{
                     alm._fri = 0;
@@ -357,6 +363,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._sat = 1;
+                    alm._repeat = 1;
                     txtSat.setVisibility(View.VISIBLE);
                 }else{
                     alm._sat = 0;
@@ -443,12 +450,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     //
                     // setInstantAlarm(calSet);
                 }else{
-                    int mIntent = modelItems.get(position).get_id();
-                    Intent intent = new Intent(context, AlarmReceiverActivity.class);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, mIntent, intent, 0);
-                    AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    am.cancel(pendingIntent);
-
+                    cancelAlarmHard(position);
                     DatabaseHandler db = new DatabaseHandler(getContext());
                     Alarm alm = db.getAlarm(modelItems.get(position)._id);
                     alm._status = 0;
@@ -460,7 +462,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         mRemoveAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog diaBox = AskOption(modelItems.get(position)._id);
+                AlertDialog diaBox = AskOption(position);
                 diaBox.show();
             }
         });
@@ -468,8 +470,9 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 
         return convertView;
     }
-    private AlertDialog AskOption(long id){
-        final int alm_id = (int) id;
+    private AlertDialog AskOption(int mId){
+        final int alm_id = modelItems.get(mId)._id;
+        final int mD = mId;
         AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getContext())
                 //set message, title, and icon
                 .setTitle("Delete")
@@ -479,6 +482,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        cancelAlarmHard(mD);
                         DatabaseHandler db = new DatabaseHandler(getContext());
                         db.deleteAlarm(db.getAlarm(alm_id));
                         db.close();
@@ -576,5 +580,12 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         }catch (NumberFormatException e){
             Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void cancelAlarmHard(int position){
+        int mIntent = modelItems.get(position).get_id();
+        Intent intent = new Intent(context, AlarmReceiverActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, mIntent, intent, 0);
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
     }
 }
