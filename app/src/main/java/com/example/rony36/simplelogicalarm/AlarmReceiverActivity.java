@@ -40,6 +40,7 @@ import java.util.Random;
 public class AlarmReceiverActivity extends Activity {
     private MediaPlayer mMediaPlayer;
     private PowerManager.WakeLock mWakeLock;
+    private String[] mList;
 //    private String wordList = "Love Fear Wake Hate Good Shine";
     @Override
     public void onCreate(Bundle saveInstanceState){
@@ -88,8 +89,12 @@ public class AlarmReceiverActivity extends Activity {
         final LinearLayout mMid = (LinearLayout) findViewById(R.id.midStop);
         final LinearLayout mHigh = (LinearLayout) findViewById(R.id.hiStop);
 
+        final EditText mInSol = (EditText) findViewById(R.id.dummyPuzzle);
+        final TextView mWoSize = (TextView) findViewById(R.id.woSize);
+
         final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
         final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
+
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
            mMid.setVisibility(View.GONE);
@@ -101,18 +106,30 @@ public class AlarmReceiverActivity extends Activity {
             mMid.setVisibility(View.VISIBLE);
             mHigh.setVisibility(View.GONE);
 
+            mWoSize.setText(""+(ringingAlarm.get_urgency()+4)+" Letters");
+            // Populating Grid and Puzzle //////////////////////////////////////////////////////////
+            int gridSize;
+            int gridAdj;
+            if (ringingAlarm.get_urgency() == -1){
+                gridSize = 5;
+                gridAdj = 40;
+            }else{
+                gridSize = 10;
+                gridAdj = 10;
+            }
             //TextView mDummy = (TextView) findViewById(R.id.dummyPuzzle);
             String[] list = getPuzzleRaw(ringingAlarm.get_urgency()).split(" ");
-            WordHunt w = new WordHunt(list, 10);
+            mList = list;
+            WordHunt w = new WordHunt(list, gridSize);
 
             //mDummy.setText(w.toString());
 
             TableLayout mWordTable = (TableLayout) findViewById(R.id.wordTable);
 
-            for(int i=0; i< 10; i++){
+            for(int i=0; i< gridSize; i++){
                 TableRow tr = new TableRow(this);
                 tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-                for(int j=0; j< 10; j++){
+                for(int j=0; j< gridSize; j++){
                     GradientDrawable gd = new GradientDrawable();
                     //gd.setColor(0xFF00FF00);
                     gd.setCornerRadius(5);
@@ -122,8 +139,8 @@ public class AlarmReceiverActivity extends Activity {
                     tv.setText("" + w.dataF[i][j]);
                     tv.setGravity(Gravity.CENTER);
                     tv.setBackgroundDrawable(gd);
-                    int sqr = Math.round(width / 10);
-                    sqr -= 5;
+                    int sqr = Math.round(width / gridSize);
+                    sqr -= gridAdj;
                     tv.setLayoutParams(new TableRow.LayoutParams(sqr, sqr));
                     tr.addView(tv);
                 }
@@ -144,8 +161,12 @@ public class AlarmReceiverActivity extends Activity {
         stopMidAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.stop();
-                finish();
+                if (Arrays.asList(mList).contains(mInSol.getText().toString().toUpperCase())){
+                    mMediaPlayer.stop();
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Oh! Dear! Our algorithm didn't found any Word like this! Wake up and Try again!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         stopHighAlarm.setOnClickListener(new View.OnClickListener() {
@@ -239,18 +260,25 @@ public class AlarmReceiverActivity extends Activity {
 
     public String getPuzzleRaw(int urgency){
         String[] raw = new String[3];
-        raw[0] = "Bad Try Ask Use You See Say Way Day Our Out Use But Who Get Eye One Man And Big Old All Few Red Fat Boy Fly Ant All Any Can Sea Dad Ink Key Odd Zoo Yet Nap Log Dew Ego Fur Gig Hay Ice Inn Ivy Jar Kit Kid Lay Leg Spy Tow Hut Hat Zip Box Fox Fix Bum Gym Sax Cup Joy Sum Sky Sun Pod Pen Pan";
-        raw[1] = "Love Fear Wake Hate Good Life Take Some Only Even Most Lord Play Next Feel Work Fact Hunt Baby High Look Evil Blue Mind Clan Luck Duck Free Oven Flip Cool Fold Acid Rain Boat Fair Head Skin Nose Bird Call Doll Boil Food Boss Junk Busy Milk Hire Moon Joke Maze Date Data Back Blow Find Heat";
-        raw[2] = "Happy Young After Under Above Small Child World Thing Number Leave Person Woman Would There Beauty Crazy Apple Again Brain Bring Delay Tooth Brave Bravo Group Extra Green Peace Yahoo Water Clash Lobby Lucky Motor Noisy Ocean Offer Great Place Float Pilot Pivot Pizza Pound Prison Break";
+        raw[0] = "BAD TRY ASK USE YOU SEE SAY WAY DAY OUR OUT USE BUT WHO GET EYE ONE MAN AND BIG OLD ALL FEW RED FAT BOY FLY ANT ALL ANY CAN SEA DAD INK KEY ODD ZOO YET NAP LOG DEW EGO FUR GIG HAY ICE INN IVY JAR KIT KID LAY LEG SPY TOW HUT HAT ZIP BOX FOX FIX BUM GYM SAX CUP JOY SUM SKY SUN POD PEN PAN";
+        raw[1] = "LOVE FEAR WAKE HATE GOOD LIFE TAKE SOME ONLY EVEN MOST LORD PLAY NEXT FEEL WORK FACT HUNT BABY HIGH LOOK EVIL BLUE MIND CLAN LUCK DUCK FREE OVEN FLIP COOL FOLD ACID RAIN BOAT FAIR HEAD SKIN NOSE BIRD CALL DOLL BOIL FOOD BOSS JUNK BUSY MILK HIRE MOON JOKE MAZE DATE DATA BACK BLOW FIND HEAT";
+        raw[2] = "HAPPY YOUNG AFTER UNDER ABOVE SMALL CHILD WORLD THING NUMBER LEAVE PERSON WOMAN WOULD THERE BEAUTY CRAZY APPLE AGAIN BRAIN BRING DELAY TOOTH BRAVE BRAVO GROUP EXTRA GREEN PEACE YAHOO WATER CLASH LOBBY LUCKY MOTOR NOISY OCEAN OFFER GREAT PLACE FLOAT PILOT PIVOT PIZZA POUND PRISON BREAK";
+
+        int gSize;
+        if (urgency == -1){
+            gSize = 15;
+        }else{
+            gSize = 25;
+        }
 
         String finalStr = "";
         String[] contain = raw[urgency+1].split(" ");
         int conL = contain.length;
-        int[] exChecker = new int[10];
-        for(int i=0; i< 10; i++){
-            int x = randInt(0, conL);
+        int[] exChecker = new int[gSize];
+        for(int i=0; i< gSize; i++){
+            int x = randInt(0, conL-1);
             if(Arrays.asList(exChecker).contains(x)){
-                x = randInt(0, conL);
+                x = randInt(0, conL-1);
                 exChecker[i] = x;
                 finalStr = finalStr+contain[x]+" ";
             }else{
