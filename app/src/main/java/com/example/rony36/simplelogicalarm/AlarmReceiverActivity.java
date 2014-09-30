@@ -90,9 +90,6 @@ public class AlarmReceiverActivity extends Activity {
 
         final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
         final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
-
-        final TextView mTxtSize = (TextView) findViewById(R.id.txtSize);
-
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
            mMid.setVisibility(View.GONE);
@@ -105,8 +102,6 @@ public class AlarmReceiverActivity extends Activity {
             mHigh.setVisibility(View.GONE);
 
             //TextView mDummy = (TextView) findViewById(R.id.dummyPuzzle);
-            String wdSiz = ""+ringingAlarm.get_urgency();
-            mTxtSize.setText(wdSiz);
             String[] list = getPuzzleRaw(ringingAlarm.get_urgency()).split(" ");
             WordHunt w = new WordHunt(list, 10);
 
@@ -128,6 +123,7 @@ public class AlarmReceiverActivity extends Activity {
                     tv.setGravity(Gravity.CENTER);
                     tv.setBackgroundDrawable(gd);
                     int sqr = Math.round(width / 10);
+                    sqr -= 5;
                     tv.setLayoutParams(new TableRow.LayoutParams(sqr, sqr));
                     tr.addView(tv);
                 }
