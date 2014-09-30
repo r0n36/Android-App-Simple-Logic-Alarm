@@ -24,5 +24,16 @@
     <string name="note">Note:</string>
     <string name="stopAlarm">Stop Alarm</string>
     <string name="solveMath">Solve the math:</string>
+    <string name="wordHunt">Word Hunt</string>
+    <string name="wordPlay">Find a Word to Stop the Alarm!</string>
+    <string name="insWord">Instructions:</string>
+    <string name="wordIns">Find a Word of </string>
+    <string name="wordIns2">letters</string>
+    <string name="wordIns3">You can pick a word in order of</string>
+    <string name="wordIns4">Left to Right</string>
+    <string name="wordIns5">Right to Left</string>
+    <string name="wordIns6">Top to Bottom</string>
+    <string name="wordIns7">Bottom to Top</string>
+    <string name="wordIns8">Diagonally</string>
 
 </resources>

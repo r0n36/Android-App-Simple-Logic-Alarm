@@ -31,6 +31,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -39,7 +40,7 @@ import java.util.Random;
 public class AlarmReceiverActivity extends Activity {
     private MediaPlayer mMediaPlayer;
     private PowerManager.WakeLock mWakeLock;
-    private String wordList = "Love Fear Wake Hate Good Shine";
+//    private String wordList = "Love Fear Wake Hate Good Shine";
     @Override
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
@@ -90,6 +91,8 @@ public class AlarmReceiverActivity extends Activity {
         final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
         final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
 
+        final TextView mTxtSize = (TextView) findViewById(R.id.txtSize);
+
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
            mMid.setVisibility(View.GONE);
@@ -102,8 +105,9 @@ public class AlarmReceiverActivity extends Activity {
             mHigh.setVisibility(View.GONE);
 
             //TextView mDummy = (TextView) findViewById(R.id.dummyPuzzle);
-
-            String[] list = wordList.split(" ");
+            String wdSiz = ""+ringingAlarm.get_urgency();
+            mTxtSize.setText(wdSiz);
+            String[] list = getPuzzleRaw(ringingAlarm.get_urgency()).split(" ");
             WordHunt w = new WordHunt(list, 10);
 
             //mDummy.setText(w.toString());
@@ -115,7 +119,7 @@ public class AlarmReceiverActivity extends Activity {
                 tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
                 for(int j=0; j< 10; j++){
                     GradientDrawable gd = new GradientDrawable();
-                    //gd.setColor(0xFF00FF00); // Changes this drawbale to use a single color instead of a gradient
+                    //gd.setColor(0xFF00FF00);
                     gd.setCornerRadius(5);
                     gd.setStroke(1, 0xFF000000);
 
@@ -123,7 +127,7 @@ public class AlarmReceiverActivity extends Activity {
                     tv.setText("" + w.dataF[i][j]);
                     tv.setGravity(Gravity.CENTER);
                     tv.setBackgroundDrawable(gd);
-                    int sqr = Math.round(width/10);
+                    int sqr = Math.round(width / 10);
                     tv.setLayoutParams(new TableRow.LayoutParams(sqr, sqr));
                     tr.addView(tv);
                 }
@@ -235,6 +239,36 @@ public class AlarmReceiverActivity extends Activity {
             }
         }
         return  alert;
+    }
+
+    public String getPuzzleRaw(int urgency){
+        String[] raw = new String[3];
+        raw[0] = "Bad Try Ask Use You See Say Way Day Our Out Use But Who Get Eye One Man And Big Old All Few Red Fat Boy Fly Ant All Any Can Sea Dad Ink Key Odd Zoo Yet Nap Log Dew Ego Fur Gig Hay Ice Inn Ivy Jar Kit Kid Lay Leg Spy Tow Hut Hat Zip Box Fox Fix Bum Gym Sax Cup Joy Sum Sky Sun Pod Pen Pan";
+        raw[1] = "Love Fear Wake Hate Good Life Take Some Only Even Most Lord Play Next Feel Work Fact Hunt Baby High Look Evil Blue Mind Clan Luck Duck Free Oven Flip Cool Fold Acid Rain Boat Fair Head Skin Nose Bird Call Doll Boil Food Boss Junk Busy Milk Hire Moon Joke Maze Date Data Back Blow Find Heat";
+        raw[2] = "Happy Young After Under Above Small Child World Thing Number Leave Person Woman Would There Beauty Crazy Apple Again Brain Bring Delay Tooth Brave Bravo Group Extra Green Peace Yahoo Water Clash Lobby Lucky Motor Noisy Ocean Offer Great Place Float Pilot Pivot Pizza Pound Prison Break";
+
+        String finalStr = "";
+        String[] contain = raw[urgency+1].split(" ");
+        int conL = contain.length;
+        int[] exChecker = new int[10];
+        for(int i=0; i< 10; i++){
+            int x = randInt(0, conL);
+            if(Arrays.asList(exChecker).contains(x)){
+                x = randInt(0, conL);
+                exChecker[i] = x;
+                finalStr = finalStr+contain[x]+" ";
+            }else{
+                exChecker[i] = x;
+                finalStr = finalStr+contain[x]+" ";
+            }
+        }
+        return finalStr.trim();
+    }
+
+    public static int randInt(int min, int max) {
+        Random rand = new Random();
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+        return randomNum;
     }
 
     protected  void onStop(){
