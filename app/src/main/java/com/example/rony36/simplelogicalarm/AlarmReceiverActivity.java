@@ -156,6 +156,7 @@ public class AlarmReceiverActivity extends Activity {
             public void onClick(View v) {
                 mMediaPlayer.stop();
                 finish();
+
             }
         });
         stopMidAlarm.setOnClickListener(new View.OnClickListener() {

@@ -39,6 +39,10 @@ import java.util.List;
 public class CustomAdapter extends ArrayAdapter<Alarm> {
     List<Alarm> modelItems = null;
     Context context;
+    LinearLayout mRepeatButts;
+    Boolean mGarbTime;
+    CheckBox mRepeatCheck;
+    Switch mAlarmOnOff;
     public CustomAdapter(Context context, List<Alarm> resource) {
         super(context,R.layout.per_alarm_activity,resource);
         // TODO Auto-generated constructor stub
@@ -53,8 +57,8 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 
         final TextView mTimeView        = (TextView) convertView.findViewById(R.id.timeTitle);
         final TextView mAmPm            = (TextView) convertView.findViewById(R.id.amPmTextView);
-        final Switch mAlarmOnOff        = (Switch) convertView.findViewById(R.id.alarmOnOff);
-        final CheckBox mRepeatCheck     = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
+                       mAlarmOnOff      = (Switch) convertView.findViewById(R.id.alarmOnOff);
+                       mRepeatCheck     = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
         final ImageView mDrop           = (ImageView) convertView.findViewById(R.id.arrowDown);
         final ImageView mUp             = (ImageView) convertView.findViewById(R.id.arrowUp);
         final LinearLayout mDetailsLay  = (LinearLayout) convertView.findViewById(R.id.detailsLay);
@@ -88,6 +92,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         final TextView txtSat = (TextView) convertView.findViewById(R.id.satTextView);
 
         final TextView mNoteTitle = (TextView) convertView.findViewById(R.id.noteTitle);
+        mRepeatButts = (LinearLayout) convertView.findViewById(R.id.repeatButts);
 
 
         if(modelItems.get(position).get_urgency() == -1){
@@ -179,7 +184,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         String formatted_time;
         if(time[0].equals("--:--")) {
             formatted_time = "--:--";
+            mGarbTime = true;
+            mRepeatCheck.setEnabled(false);
+            mAlarmOnOff.setEnabled(false);
+            for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
+                View child = mRepeatButts.getChildAt(i);
+                child.setEnabled(false);
+            }
         }else{
+            mGarbTime = false;
             String[] oTime = time[0].split(":");
             int hour = Integer.parseInt(oTime[0]);
             int min = Integer.parseInt(oTime[1]);
@@ -199,10 +212,16 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         else
             mAlarmOnOff.setChecked(false);
 
-        if(modelItems.get(position).get_repeat() == 1)
+        if(modelItems.get(position).get_repeat() == 1){
             mRepeatCheck.setChecked(true);
-        else
+        }else{
             mRepeatCheck.setChecked(false);
+
+            for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
+                View child = mRepeatButts.getChildAt(i);
+                child.setEnabled(false);
+            }
+        }
 
         if(modelItems.get(position).get_sun() == 1) {
             mSun.setChecked(true);
@@ -268,6 +287,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtSun.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -286,6 +306,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtMon.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -303,6 +324,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtTue.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -319,6 +341,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtWed.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -336,6 +359,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtThu.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -353,6 +377,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtFri.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -370,6 +395,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtSat.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -409,7 +435,10 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         mRepeatCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if(isChecked) {
+                    alm._status = 1;
                     if (mDetailsLay.getVisibility() != View.VISIBLE){
                         mRemoveAlarm.setVisibility(View.VISIBLE);
                         mUp.setVisibility(View.VISIBLE);
@@ -419,44 +448,43 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                         dropDownAnim.setDuration(500);
                         mDetailsLay.startAnimation(dropDownAnim);
                     }
+                    if (!mGarbTime) {
+                        for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
+                            View child = mRepeatButts.getChildAt(i);
+                            child.setEnabled(true);
+                        }
+                    }
+                    cancelAlarmHard(position);
+                }else {
+                    alm._status = 0;
+                    for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
+                        View child = mRepeatButts.getChildAt(i);
+                        child.setEnabled(false);
+                    }
+                    cancelAlarmHard(position);
                 }
+                db.updateAlarm(alm);
+                if (!mGarbTime){
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+                }
+                db.close();
             }
         });
 
         mAlarmOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cancelAlarmHard(position);
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if(isChecked){
-                    Toast.makeText(context, "Nothing to do in here!", Toast.LENGTH_SHORT).show();
-
-                    // status = "ON";
-                    // String[] date_str = read_data.split(" ");
-                    // String[] coreTime = date_str[0].split(":");
-                    // Integer dHour = date_str[1].toCharArray()[0] == 'P' ? Integer.parseInt(coreTime[0])+12 : Integer.parseInt(coreTime[0]);
-                    //Integer milliTime = dHour * 1000 + Integer.parseInt(coreTime[1])* 1000;
-                    //
-                    // Calendar calNow = Calendar.getInstance();
-                    // Calendar calSet = (Calendar) calNow.clone();
-                    //
-                    // calSet.set(Calendar.HOUR_OF_DAY, dHour);
-                    // calSet.set(Calendar.MINUTE, Integer.parseInt(coreTime[1]));
-                    // calSet.set(Calendar.SECOND, 0);
-                    // calSet.set(Calendar.MILLISECOND, 0);
-                    //
-                    // if(calSet.compareTo(calNow) <= 0){
-                    //     //Today Set time passed, count to tomorrow
-                    //     calSet.add(Calendar.DATE, 1);
-                    // }
-                    //
-                    // setInstantAlarm(calSet);
+                    alm._status = 1;
                 }else{
-                    cancelAlarmHard(position);
-                    DatabaseHandler db = new DatabaseHandler(getContext());
-                    Alarm alm = db.getAlarm(modelItems.get(position)._id);
                     alm._status = 0;
-                    db.updateAlarm(alm);
-                    db.close();
                 }
+                db.updateAlarm(alm);
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+                db.close();
             }
         });
         mRemoveAlarm.setOnClickListener(new View.OnClickListener() {
@@ -550,7 +578,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             alm._alarm_time = txtToSave;
             alm._status = 1;
             db.updateAlarm(alm);
-            db.close();
 
             Alarm alteredAlarm = modelItems.get(listPosition);
             alteredAlarm._alarm_time = txtToSave;
@@ -558,9 +585,76 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             modelItems.set(listPosition, alteredAlarm);
 
             notifyDataSetChanged();
-            setInstantAlarm(calSet, modelItems.get(listPosition)._id);
+            mGarbTime = false;
+            mRepeatCheck.setEnabled(true);
+            mAlarmOnOff.setEnabled(true);
+            int dbId = modelItems.get(listPosition)._id;
+            if (alm.get_repeat() != 1){
+               setInstantAlarm(calSet, dbId);
+            }else{
+                updateRepeatingAlarm(alm, hourOfDay, minute, dbId);
+            }
+            db.close();
+
+            //for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
+            //    View child = mRepeatButts.getChildAt(i);
+            //    child.setEnabled(true);
+            //}
         }
     };
+    private void updateRepeatingAlarm(Alarm alm, int hourOfDay, int minute, int dbId){
+        if (alm.get_repeat() == 1 && alm.get_status() == 1){
+            if (alm.get_fri() == 1){
+                setRepeatAlarm(6, hourOfDay, minute, dbId);
+            }else if (alm.get_sat() == 1){
+                setRepeatAlarm(7, hourOfDay, minute, dbId);
+            }else if (alm.get_sun() == 1){
+                setRepeatAlarm(1, hourOfDay, minute, dbId);
+            }else if (alm.get_mon() == 1){
+                setRepeatAlarm(2, hourOfDay, minute, dbId);
+            }else if (alm.get_tue() == 1){
+                setRepeatAlarm(3, hourOfDay, minute, dbId);
+            }else if (alm.get_wed() == 1){
+                setRepeatAlarm(4, hourOfDay, minute, dbId);
+            }else if (alm.get_thu() == 1){
+                setRepeatAlarm(5, hourOfDay, minute, dbId);
+            }
+        }
+    }
+
+    private void setRepeatAlarm(int weekDay, int hour, int minute, int pos){
+        Calendar calNow = Calendar.getInstance();
+        Calendar calSet = (Calendar) calNow.clone();
+
+        calSet.set(Calendar.DAY_OF_WEEK, weekDay);
+        calSet.set(Calendar.HOUR_OF_DAY, hour);
+        calSet.set(Calendar.MINUTE, minute);
+        calSet.set(Calendar.SECOND, 0);
+        calSet.set(Calendar.MILLISECOND, 0);
+
+        Intent intent = new Intent(context, AlarmReceiverActivity.class);
+        intent.putExtra("requestCode", pos);
+        PendingIntent pendingIntent =
+                PendingIntent.getActivity(context, pos, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP,
+                calSet.getTimeInMillis(), 1 * 60 * 60 * 1000, pendingIntent);
+        Toast.makeText(context, "Next Alarm Set to "+getTimeDifferenceForDisplay(calNow, calSet)+" from now", Toast.LENGTH_SHORT).show();
+    }
+    private String getTimeDifferenceForDisplay(Calendar from, Calendar to){
+        String str = "";
+        int hours = (int) (to.getTimeInMillis() - from.getTimeInMillis()) / (1000*60*60);
+        int minutes = (int) (to.getTimeInMillis() - from.getTimeInMillis()) / (1000*60);
+        int seconds = (int) (to.getTimeInMillis() - from.getTimeInMillis()) / 1000;
+        if (hours != 0){
+            str += hours + " hours ";
+        }else if (minutes != 0){
+            str += minutes + " minutes ";
+        }
+
+        str += seconds + " seconds";
+        return str;
+    }
     private void setInstantAlarm(Calendar timeFromNow, int pos){
         try{
             Intent intent = new Intent(context, AlarmReceiverActivity.class);
@@ -581,6 +675,25 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private int getHourFromAlarm(Alarm alm){
+        String time = alm.get_alarm_time().split(" ")[0];
+        String amPm = alm.get_alarm_time().split(" ")[1];
+        int hourOfDay;
+        if (amPm.equals("PM") && Integer.parseInt(time.split(":")[0]) != 12){
+            hourOfDay = Integer.parseInt(time.split(":")[0]) + 12;
+        }else{
+            hourOfDay = Integer.parseInt(time.split(":")[0]);
+        }
+        return hourOfDay;
+    }
+    private int getMinutesFromAlarm(Alarm alm){
+        String time = alm.get_alarm_time().split(" ")[0];
+        return Integer.parseInt(time.split(":")[1]);
+    }
+
+
+
     private void cancelAlarmHard(int position){
         int mIntent = modelItems.get(position).get_id();
         Intent intent = new Intent(context, AlarmReceiverActivity.class);
