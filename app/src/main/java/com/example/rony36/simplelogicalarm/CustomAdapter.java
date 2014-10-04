@@ -692,7 +692,9 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         return Integer.parseInt(time.split(":")[1]);
     }
 
+    private void checkRepeatKeys(){
 
+    }
 
     private void cancelAlarmHard(int position){
         int mIntent = modelItems.get(position).get_id();
