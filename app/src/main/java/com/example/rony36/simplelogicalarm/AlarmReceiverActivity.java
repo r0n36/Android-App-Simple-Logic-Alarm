@@ -153,7 +153,7 @@ public class AlarmReceiverActivity extends Activity {
             mImg.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
                 public void onSwipeLeft() {
                     // Whatever
-                    Toast.makeText(getApplicationContext(), "I'm Left ^_^", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "I'm Left yes ^_^", Toast.LENGTH_SHORT).show();
                 }
             });
         }
