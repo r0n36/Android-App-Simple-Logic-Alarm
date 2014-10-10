@@ -16,12 +16,14 @@ import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -94,6 +96,7 @@ public class AlarmReceiverActivity extends Activity {
 
         final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
         final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
+        final ImageView mImg = (ImageView) findViewById(R.id.imageView);
 
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
@@ -146,6 +149,13 @@ public class AlarmReceiverActivity extends Activity {
                 }
                 mWordTable.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
             }
+        }else{
+            mImg.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+                public void onSwipeLeft() {
+                    // Whatever
+                    Toast.makeText(getApplicationContext(), "I'm Left ^_^", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         db.close();

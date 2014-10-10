@@ -34,6 +34,14 @@
             android:id="@+id/btnStopAlarm"
             android:layout_gravity="center"
             android:layout_marginTop="50sp" />
+
+        <ImageView
+            android:layout_width="30sp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.30"
+            android:src="@android:drawable/ic_lock_idle_low_battery" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
