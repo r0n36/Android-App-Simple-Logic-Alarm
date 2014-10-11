@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MenuC extends View {
 	
 	private int over_engagement = 15; //how much distance to set over item true
 	private int click_engagement = 25; //how much distanc to set click item true
-	    
+
     public MenuC(Context context) {
         super(context);
         setFocusable(true); //necessary for getting the touch events
@@ -116,11 +117,15 @@ public class MenuC extends View {
         	{
     			if(m.get_isclick())
     			{
-    	    		Paint paint = new Paint();
-    	    		paint.setColor(Color.BLACK); 
-    	    		paint.setTextSize(20); 
-    				canvas.drawText(new Integer(m.get_id()).toString() + " is clicked", 30, 30, paint);
-                    Toast.makeText(getContext(), m.get_id()+" Clicked", Toast.LENGTH_SHORT).show();
+    	    		//Paint paint = new Paint();
+    	    		//paint.setColor(Color.BLACK);
+    	    		//paint.setTextSize(20);
+    				//canvas.drawText(new Integer(m.get_id()).toString() + " is clicked", 30, 30, paint);
+                    //Toast.makeText(getContext(), m.get_id()+" Clicked", Toast.LENGTH_SHORT).show();
+                    if(m.get_id() == 3){
+                        ((AlarmReceiverActivity)getContext()).mMediaPlayer.stop();
+                        ((Activity)(getContext())).finish();
+                    }
     			}
         	}
     	}

@@ -40,7 +40,7 @@ import java.util.Random;
  * Created by RonyLap on 8/30/2014.
  */
 public class AlarmReceiverActivity extends Activity {
-    private MediaPlayer mMediaPlayer;
+    public MediaPlayer mMediaPlayer;
     private PowerManager.WakeLock mWakeLock;
     private String[] mList;
 //    private String wordList = "Love Fear Wake Hate Good Shine";
