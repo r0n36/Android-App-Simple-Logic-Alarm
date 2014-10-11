@@ -1,4 +1,4 @@
-package com.example.rony36.simplelogicalarm;
+package com.ebipon.apps.simplelogicalarm;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

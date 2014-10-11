@@ -1,4 +1,4 @@
-package com.example.rony36.simplelogicalarm;
+package com.ebipon.apps.simplelogicalarm;
 
 /**
  * Created by RonyLap on 9/30/2014.

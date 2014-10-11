@@ -1,6 +1,4 @@
-package com.example.rony36.simplelogicalarm;
-
-import android.text.format.Time;
+package com.ebipon.apps.simplelogicalarm;
 
 import java.lang.String;
 

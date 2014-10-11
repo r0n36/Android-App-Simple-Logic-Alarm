@@ -1,11 +1,7 @@
-package com.example.rony36.simplelogicalarm;
+package com.ebipon.apps.simplelogicalarm;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.ClipData;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -16,14 +12,11 @@ import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 

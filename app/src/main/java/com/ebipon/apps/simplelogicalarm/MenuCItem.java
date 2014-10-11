@@ -1,12 +1,11 @@
-package com.example.rony36.simplelogicalarm;
+package com.ebipon.apps.simplelogicalarm;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 
-//pointer class
-public class MenuCPointer {
+//item class
+public class MenuCItem {
 	private Bitmap img;
 	private Bitmap imgover;
 	private int imgradius;
@@ -15,18 +14,20 @@ public class MenuCPointer {
 	private int height = 0;
 	private int width = 0;
 	private int border = 0;
-	private Point homepoint = null;
-	private boolean isselected = false;
+	private boolean isover = false;
+	private boolean isclick = false;
+	private int id = 0;
 	
-	public MenuCPointer(Context context, int img, int imgover, int border) {
+	public MenuCItem(Context context, int img, int imgover, int border, int id) {
 		BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
-        this.border = border;
         this.img = BitmapFactory.decodeResource(context.getResources(), img);
         this.imgover = BitmapFactory.decodeResource(context.getResources(), imgover);
         this.imgradius = this.img.getWidth()/2;
         this.height = this.img.getHeight();
         this.width = this.img.getWidth();
+        this.border = border;
+        this.id = id;
 	}
 	
 	public int get_x() {
@@ -46,33 +47,33 @@ public class MenuCPointer {
 	}
 	
 	public Bitmap get_img() {
-		if(isselected)
+		if(isover)
 			return imgover;
 		else
 			return img;
 	}
-	
-	public void set_homeposition(Point point) {
-        this.homepoint = point;
-	}
-	
+		
 	public void set_position(int goX, int goY) {
 		x = goX;
 		y = goY;
 	}
 	
-	public boolean get_isselected() {
-		return isselected;
+	public boolean get_isover() {
+		return isover;
 	}
 	
-	void set_isselected(boolean newValue) {
-        isselected = newValue;
+	void set_isover(boolean newValue) {
+        isover = newValue;
 	}
 	
-	public Point get_homepoint() {
-		return homepoint;
+	public boolean get_isclick() {
+		return isclick;
 	}
-		
+	
+	void set_isclick(boolean newValue) {
+        isclick = newValue;
+	}
+	
 	public int get_imgradius() {
 		return imgradius;
 	}
@@ -87,5 +88,9 @@ public class MenuCPointer {
 	
 	public int get_border() {
 		return border;
+	}
+	
+	public int get_id() {
+		return id;
 	}
 }

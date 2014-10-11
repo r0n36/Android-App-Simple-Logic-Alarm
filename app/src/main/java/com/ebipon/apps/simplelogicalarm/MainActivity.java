@@ -1,39 +1,12 @@
-package com.example.rony36.simplelogicalarm;
+package com.ebipon.apps.simplelogicalarm;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
+
 import java.util.List;
 
 
