@@ -96,7 +96,7 @@ public class AlarmReceiverActivity extends Activity {
 
         final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
         final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
-        final ImageView mImg = (ImageView) findViewById(R.id.imageView);
+//        final ImageView mImg = (ImageView) findViewById(R.id.imageView);
 
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
@@ -150,12 +150,15 @@ public class AlarmReceiverActivity extends Activity {
                 mWordTable.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
             }
         }else{
-            mImg.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
-                public void onSwipeLeft() {
-                    // Whatever
-                    Toast.makeText(getApplicationContext(), "I'm Left yes no fin ^_^", Toast.LENGTH_SHORT).show();
-                }
-            });
+//            mImg.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+//                public void onSwipeLeft() {
+//                    // Whatever
+//                    Toast.makeText(getApplicationContext(), "I'm Left yes no fin ^_^", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+            LinearLayout mainLayout = (LinearLayout) findViewById(R.id.LinearLayout_main);
+            MenuC myView = new MenuC(this);
+            mainLayout.addView(myView);
         }
 
         db.close();

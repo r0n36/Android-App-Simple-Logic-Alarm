@@ -10,39 +10,31 @@
         android:id="@+id/simpleStop"
         android:orientation="vertical"
         android:layout_height="fill_parent"
-        android:background="@android:color/background_dark"
-        android:weightSum="1">
-
-        <AnalogClock
-            android:layout_width="249dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/analogClock"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.30" />
-
-        <TextClock
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textClock"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@android:color/background_light" />
+        android:background="@android:color/background_dark">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/stopAlarm"
             android:id="@+id/btnStopAlarm"
-            android:layout_gravity="center"
-            android:layout_marginTop="50sp" />
+            android:layout_gravity="center" />
 
-        <ImageView
-            android:layout_width="30sp"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.30"
-            android:src="@android:drawable/ic_lock_idle_low_battery" />
+        <!--<ImageSwitcher-->
+        <!--android:id="@+id/ImageSwitcherBackground"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/img_backmain">-->
+        <!--</ImageSwitcher>-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/LinearLayout_main"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true">
+        </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:id="@+id/midStop"
@@ -162,6 +154,7 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:id="@+id/hiStop"
@@ -191,7 +184,7 @@
                 android:text="111"
                 android:id="@+id/hiEquation" />
 
-            </LinearLayout>
+        </LinearLayout>
 
 
         <EditText

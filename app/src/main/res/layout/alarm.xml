@@ -17,8 +17,22 @@
             android:layout_height="wrap_content"
             android:text="@string/stopAlarm"
             android:id="@+id/btnStopAlarm"
-            android:layout_gravity="center"
-            android:layout_marginTop="250sp" />
+            android:layout_gravity="center" />
+
+        <!--<ImageSwitcher-->
+            <!--android:id="@+id/ImageSwitcherBackground"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/img_backmain">-->
+        <!--</ImageSwitcher>-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/LinearLayout_main"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true">
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
