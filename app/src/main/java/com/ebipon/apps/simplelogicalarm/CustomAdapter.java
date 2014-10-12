@@ -39,7 +39,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
     Context context;
     LinearLayout mRepeatButts;
     Boolean mGarbTime;
-    CheckBox mRepeatCheck;
+//    CheckBox mRepeatCheck;
     Switch mAlarmOnOff;
     public CustomAdapter(Context context, List<Alarm> resource) {
         super(context,R.layout.per_alarm_activity,resource);
@@ -56,7 +56,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         final TextView mTimeView        = (TextView) convertView.findViewById(R.id.timeTitle);
         final TextView mAmPm            = (TextView) convertView.findViewById(R.id.amPmTextView);
                        mAlarmOnOff      = (Switch) convertView.findViewById(R.id.alarmOnOff);
-                       mRepeatCheck     = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
+        final CheckBox mRepeatCheck     = (CheckBox) convertView.findViewById(R.id.repeatCheckBox);
         final ImageView mDrop           = (ImageView) convertView.findViewById(R.id.arrowDown);
         final ImageView mUp             = (ImageView) convertView.findViewById(R.id.arrowUp);
         final LinearLayout mDetailsLay  = (LinearLayout) convertView.findViewById(R.id.detailsLay);
@@ -285,7 +285,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtSun.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 1);
                 db.close();
             }
         });
@@ -304,7 +317,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtMon.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 2);
                 db.close();
             }
         });
@@ -322,7 +348,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtTue.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 3);
                 db.close();
             }
         });
@@ -339,7 +378,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtWed.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 4);
                 db.close();
             }
         });
@@ -357,7 +409,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtThu.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 5);
                 db.close();
             }
         });
@@ -375,7 +440,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtFri.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 6);
                 db.close();
             }
         });
@@ -393,7 +471,20 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     txtSat.setVisibility(View.INVISIBLE);
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+
+                if(!repeatExist(position)){
+                    mRepeatCheck.setChecked(false);
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    alm._repeat = 0;
+                    db.updateAlarm(alm);
+                }
+                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 7);
                 db.close();
             }
         });
@@ -436,7 +527,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 DatabaseHandler db = new DatabaseHandler(getContext());
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if(isChecked) {
-                    alm._status = 1;
+                    alm._repeat = 1;
                     if (mDetailsLay.getVisibility() != View.VISIBLE){
                         mRemoveAlarm.setVisibility(View.VISIBLE);
                         mUp.setVisibility(View.VISIBLE);
@@ -447,24 +538,30 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                         mDetailsLay.startAnimation(dropDownAnim);
                     }
                     if (!mGarbTime) {
-                        for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
-                            View child = mRepeatButts.getChildAt(i);
-                            child.setEnabled(true);
-                        }
+                        mSun.setEnabled(true);
+                        mMon.setEnabled(true);
+                        mTue.setEnabled(true);
+                        mWed.setEnabled(true);
+                        mThu.setEnabled(true);
+                        mFri.setEnabled(true);
+                        mSat.setEnabled(true);
                     }
-                    cancelAlarmHard(position);
+                    //cancelAlarmHard(position);
                 }else {
-                    alm._status = 0;
-                    for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
-                        View child = mRepeatButts.getChildAt(i);
-                        child.setEnabled(false);
-                    }
-                    cancelAlarmHard(position);
+                    alm._repeat = 0;
+                    mSun.setEnabled(false);
+                    mMon.setEnabled(false);
+                    mTue.setEnabled(false);
+                    mWed.setEnabled(false);
+                    mThu.setEnabled(false);
+                    mFri.setEnabled(false);
+                    mSat.setEnabled(false);
+                    //cancelAlarmHard(position);
                 }
                 db.updateAlarm(alm);
-                if (!mGarbTime){
-                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
-                }
+                //if (!mGarbTime){
+                //    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+                //}
                 db.close();
             }
         });
@@ -481,7 +578,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._status = 0;
                 }
                 db.updateAlarm(alm);
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
+                //updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -584,39 +681,26 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
 
             notifyDataSetChanged();
             mGarbTime = false;
-            mRepeatCheck.setEnabled(true);
+            //mRepeatCheck.setEnabled(true);
             mAlarmOnOff.setEnabled(true);
             int dbId = modelItems.get(listPosition)._id;
             if (alm.get_repeat() != 1){
                setInstantAlarm(calSet, dbId);
             }else{
-                updateRepeatingAlarm(alm, hourOfDay, minute, dbId);
+                     if(alm.get_sun() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 1);}
+                else if(alm.get_mon() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 2);}
+                else if(alm.get_tue() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 3);}
+                else if(alm.get_wed() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 4);}
+                else if(alm.get_thu() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 5);}
+                else if(alm.get_fri() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 6);}
+                else if(alm.get_sat() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 7);}
             }
             db.close();
-
-            //for (int i = 0; i < mRepeatButts.getChildCount(); i++) {
-            //    View child = mRepeatButts.getChildAt(i);
-            //    child.setEnabled(true);
-            //}
         }
     };
-    private void updateRepeatingAlarm(Alarm alm, int hourOfDay, int minute, int dbId){
+    private void updateRepeatingAlarm(Alarm alm, int hourOfDay, int minute, int dbId, int key){
         if (alm.get_repeat() == 1 && alm.get_status() == 1){
-            if (alm.get_fri() == 1){
-                setRepeatAlarm(6, hourOfDay, minute, dbId);
-            }else if (alm.get_sat() == 1){
-                setRepeatAlarm(7, hourOfDay, minute, dbId);
-            }else if (alm.get_sun() == 1){
-                setRepeatAlarm(1, hourOfDay, minute, dbId);
-            }else if (alm.get_mon() == 1){
-                setRepeatAlarm(2, hourOfDay, minute, dbId);
-            }else if (alm.get_tue() == 1){
-                setRepeatAlarm(3, hourOfDay, minute, dbId);
-            }else if (alm.get_wed() == 1){
-                setRepeatAlarm(4, hourOfDay, minute, dbId);
-            }else if (alm.get_thu() == 1){
-                setRepeatAlarm(5, hourOfDay, minute, dbId);
-            }
+            setRepeatAlarm(key, hourOfDay, minute, dbId);
         }
     }
 
@@ -663,12 +747,13 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             am.set(AlarmManager.RTC_WAKEUP, timeFromNow.getTimeInMillis(), pendingIntent);
 
 
-            String time = String.format("%d hours, %d minutes and %d seconds\n",
-                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60 * 60),
-                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60), (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / 1000
-            );
+//            String time =
+//                    String.format("%d hours, %d minutes and %d seconds\n",
+//                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60 * 60),
+//                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60), (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / 1000
+//            );
 
-            Toast.makeText(context, "Alarm Set to "+time+" from now", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Alarm Set to "+getTimeDifferenceForDisplay(Calendar.getInstance(), timeFromNow)+" from now", Toast.LENGTH_SHORT).show();
         }catch (NumberFormatException e){
             Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }
@@ -690,8 +775,12 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         return Integer.parseInt(time.split(":")[1]);
     }
 
-    private void checkRepeatKeys(){
-
+    private boolean repeatExist(int position){
+        DatabaseHandler db = new DatabaseHandler(getContext());
+        Alarm alm = db.getAlarm(modelItems.get(position)._id);
+        int tot = alm.get_sun()+alm.get_mon()+alm.get_tue()+alm.get_wed()+alm.get_thu()+alm.get_fri()+alm.get_sat();
+        db.close();
+        return tot > 0;
     }
 
     private void cancelAlarmHard(int position){
