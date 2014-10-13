@@ -684,7 +684,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             //mRepeatCheck.setEnabled(true);
             mAlarmOnOff.setEnabled(true);
             int dbId = modelItems.get(listPosition)._id;
-            if (alm.get_repeat() != 1){
+            if (alm.get_repeat() != 1 && !repeatExist(listPosition)){
                setInstantAlarm(calSet, dbId);
             }else{
                      if(alm.get_sun() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 1);}
@@ -732,7 +732,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         long hours      = minutes / 60;
         long days       = hours   / 24;
 
-        return (days + " days " + hours % 24 + " hours " + minutes % 60 + " minutes " + seconds % 60 + " seconds");
+        if (days != 0)
+            str += days + " days ";
+        if ((hours % 24) != 0)
+            str += (hours % 24) + " hours ";
+        if ((minutes % 60) != 0)
+            str += (minutes % 60) + " minutes ";
+
+        str += (seconds % 60) + " seconds";
+        return str; //(days + " days " + hours % 24 + " hours " + minutes % 60 + " minutes " + seconds % 60 + " seconds");
     }
     private void setInstantAlarm(Calendar timeFromNow, int pos){
         try{
