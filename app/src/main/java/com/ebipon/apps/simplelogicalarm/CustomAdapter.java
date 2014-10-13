@@ -725,17 +725,14 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
     }
     private String getTimeDifferenceForDisplay(Calendar from, Calendar to){
         String str = "";
-        int hours = (int) (to.getTimeInMillis() - from.getTimeInMillis()) / (1000*60*60);
-        int minutes = (int) (to.getTimeInMillis() - from.getTimeInMillis()) / (1000*60);
-        int seconds = (int) (to.getTimeInMillis() - from.getTimeInMillis()) / 1000;
-        if (hours != 0){
-            str += hours + " hours ";
-        }else if (minutes != 0){
-            str += minutes + " minutes ";
-        }
+        long dif = (to.getTimeInMillis() - from.getTimeInMillis());
 
-        str += seconds + " seconds";
-        return str;
+        long seconds    = dif     / 1000;
+        long minutes    = seconds / 60;
+        long hours      = minutes / 60;
+        long days       = hours   / 24;
+
+        return (days + " days " + hours % 24 + " hours " + minutes % 60 + " minutes " + seconds % 60 + " seconds");
     }
     private void setInstantAlarm(Calendar timeFromNow, int pos){
         try{
