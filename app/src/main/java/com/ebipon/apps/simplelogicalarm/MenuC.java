@@ -1,6 +1,7 @@
 package com.ebipon.apps.simplelogicalarm;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -121,6 +122,8 @@ public class MenuC extends View {
                     if(m.get_id() == 3){
                         ((AlarmReceiverActivity)getContext()).mMediaPlayer.stop();
                         ((Activity)(getContext())).finish();
+                        NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.cancel(((AlarmReceiverActivity)getContext()).mReqCode);
                     }
     			}
         	}

@@ -16,7 +16,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.ebipon.apps.simplelogicalarm.AlarmReceiverActivity"></activity>
+        <activity android:name="com.ebipon.apps.simplelogicalarm.AlarmReceiverActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+        </activity>
     </application>
 
 </manifest>

@@ -2,10 +2,13 @@ package com.ebipon.apps.simplelogicalarm;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.DisplayMetrics;
 import android.widget.ArrayAdapter;
 import android.app.Activity;

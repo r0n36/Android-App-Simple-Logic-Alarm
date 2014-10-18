@@ -1,7 +1,12 @@
 package com.ebipon.apps.simplelogicalarm;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -9,6 +14,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +33,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Random;
 
 /**
@@ -32,6 +41,7 @@ import java.util.Random;
  */
 public class AlarmReceiverActivity extends Activity {
     public MediaPlayer mMediaPlayer;
+    public int mReqCode;
     private PowerManager.WakeLock mWakeLock;
     private String[] mList;
 //    private String wordList = "Love Fear Wake Hate Good Shine";
@@ -77,6 +87,29 @@ public class AlarmReceiverActivity extends Activity {
         int rowId = getIntent().getIntExtra("requestCode", 1);
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         Alarm ringingAlarm = db.getAlarm(rowId);
+
+
+/////////////// Notification //////////////////////////////////////////////////////////////////////
+
+        final NotificationManager mgr =
+                (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification note = new Notification(R.drawable.img_backmain,
+                "Wake up!",
+                System.currentTimeMillis());
+        Calendar c = Calendar.getInstance();
+        int intentId = (rowId * 1000)+c.getTime().getDay();
+        // This pending intent will open after notification click
+        PendingIntent mNotifyIntent= PendingIntent.getActivity(this, intentId, getIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
+
+        note.setLatestEventInfo(this, ""+ringingAlarm.get_alarm_time()+" - "+ringingAlarm.get_note(),
+                "Wake up! It's Late Already", mNotifyIntent);
+
+        note.flags |= Notification.FLAG_NO_CLEAR;
+        //After uncomment this line you will see number of notification arrived
+        //note.number=2;
+        mgr.notify(rowId, note);
+        mReqCode = rowId;
+/////////////// End of Notification ///////////////////////////////////////////////////////////////
 
         final LinearLayout mSimple = (LinearLayout) findViewById(R.id.simpleStop);
         final LinearLayout mMid = (LinearLayout) findViewById(R.id.midStop);
