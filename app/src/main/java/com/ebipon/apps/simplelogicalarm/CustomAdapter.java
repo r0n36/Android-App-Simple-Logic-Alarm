@@ -93,6 +93,40 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         mRepeatButts = (LinearLayout) convertView.findViewById(R.id.repeatButts);
 
 
+/////////////Pre-defined Animation  ///////////////////////////////////////////////
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        double mHeight = height - (height * 0.6);
+        final int targetHeight = (int) Math.round(mHeight);
+        mDrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRemoveAlarm.setVisibility(View.VISIBLE);
+                mUp.setVisibility(View.VISIBLE);
+                mDrop.setVisibility(View.GONE);
+                mDetailsLay.setVisibility(View.VISIBLE);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, true);
+                dropDownAnim.setDuration(500);
+                mDetailsLay.startAnimation(dropDownAnim);
+            }
+        });
+        mUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRemoveAlarm.setVisibility(View.GONE);
+                mUp.setVisibility(View.GONE);
+                mDrop.setVisibility(View.VISIBLE);
+                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, false);
+                dropDownAnim.setDuration(500);
+                mDetailsLay.startAnimation(dropDownAnim);
+            }
+        });
+///////////// End of Pre-defined Animation ///////////////////////////////////////////////
+
+////////////On-loading activities /////////////////////////////////////////////////
+        mNoteTitle.setText(modelItems.get(position).get_note());
         if(modelItems.get(position).get_urgency() == -1){
             mUrgencyGrp.check(mWakeLow.getId());
         }else if (modelItems.get(position).get_urgency() == 0){
@@ -108,76 +142,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         }else if(modelItems.get(position).get_off_method() == 1){
             mMethodGrp.check(mMethodMath.getId());
         }
-
-        mUrgencyGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //Toast.makeText(context, checkedId, Toast.LENGTH_SHORT).show();
-                DatabaseHandler db = new DatabaseHandler(getContext());
-                Alarm alm = db.getAlarm(modelItems.get(position)._id);
-                if(mWakeLow.isChecked()) {
-                    alm._urgency = -1;
-                }else if(mWakeMedium.isChecked()){
-                    alm._urgency = 0;
-                }else if(mWakeHigh.isChecked()){
-                    alm._urgency = 1;
-                }
-                db.updateAlarm(alm);
-                db.close();
-            }
-        });
-        mMethodGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //Toast.makeText(context, checkedId, Toast.LENGTH_SHORT).show();
-                DatabaseHandler db = new DatabaseHandler(getContext());
-                Alarm alm = db.getAlarm(modelItems.get(position)._id);
-                if(mMethodNormal.isChecked()) {
-                    alm._off_method = -1;
-                }else if(mMethodPuzzle.isChecked()){
-                    alm._off_method = 0;
-                }else if(mMethodMath.isChecked()){
-                    alm._off_method = 1;
-                }
-                db.updateAlarm(alm);
-                db.close();
-            }
-        });
-
-        mNoteTitle.setText(modelItems.get(position).get_note());
-        mNoteTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText titleInput = new EditText(context);
-
-                titleInput.setHint("Enter a note or title");
-
-                new AlertDialog.Builder(context)
-                        .setTitle("Set Title")
-                        .setMessage("Alarm Note")
-                        .setView(titleInput)
-                        .setPositiveButton("Set", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                String title = titleInput.getText().toString();
-                                //Toast.makeText(context, titleInput, Toast.LENGTH_SHORT).show();
-                                mNoteTitle.setText(title);
-                                DatabaseHandler db = new DatabaseHandler(getContext());
-                                Alarm alm = db.getAlarm(modelItems.get(position)._id);
-                                alm._note = title;
-                                db.updateAlarm(alm);
-                                db.close();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        })
-                        .show();
-            }
-        });
-
         String[] time = modelItems.get(position).get_alarm_time().split(" ");
         String formatted_time;
         if(time[0].equals("--:--")) {
@@ -198,13 +162,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         }
         mTimeView.setText(formatted_time);
         mAmPm.setText(time[1]);
-        mTimeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTimePickerDialog(false, position);
-            }
-        });
-
         if(modelItems.get(position).get_status() == 1)
             mAlarmOnOff.setChecked(true);
         else
@@ -220,12 +177,11 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 child.setEnabled(false);
             }
         }
-
         if(modelItems.get(position).get_sun() == 1) {
             mSun.setChecked(true);
             txtSun.setVisibility(View.VISIBLE);
         }else {
-            mMon.setChecked(false);
+            mSun.setChecked(false);
             txtSun.setVisibility(View.INVISIBLE);
         }
         if(modelItems.get(position).get_mon() == 1) {
@@ -271,6 +227,82 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             txtSat.setVisibility(View.INVISIBLE);
         }
 
+////////////////////End of  on-loading activities /////////////////////////////////////////////////
+
+/////////////////// On-Click Actions /////////////////////////////////////////////////////
+
+        mUrgencyGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //Toast.makeText(context, checkedId, Toast.LENGTH_SHORT).show();
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if(mWakeLow.isChecked()) {
+                    alm._urgency = -1;
+                }else if(mWakeMedium.isChecked()){
+                    alm._urgency = 0;
+                }else if(mWakeHigh.isChecked()){
+                    alm._urgency = 1;
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mMethodGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //Toast.makeText(context, checkedId, Toast.LENGTH_SHORT).show();
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                if(mMethodNormal.isChecked()) {
+                    alm._off_method = -1;
+                }else if(mMethodPuzzle.isChecked()){
+                    alm._off_method = 0;
+                }else if(mMethodMath.isChecked()){
+                    alm._off_method = 1;
+                }
+                db.updateAlarm(alm);
+                db.close();
+            }
+        });
+        mNoteTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText titleInput = new EditText(context);
+
+                titleInput.setHint("Enter a note or title");
+
+                new AlertDialog.Builder(context)
+                        .setTitle("Set Title")
+                        .setMessage("Alarm Note")
+                        .setView(titleInput)
+                        .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String title = titleInput.getText().toString();
+                                //Toast.makeText(context, titleInput, Toast.LENGTH_SHORT).show();
+                                mNoteTitle.setText(title);
+                                DatabaseHandler db = new DatabaseHandler(getContext());
+                                Alarm alm = db.getAlarm(modelItems.get(position)._id);
+                                alm._note = title;
+                                db.updateAlarm(alm);
+                                db.close();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        })
+                        .show();
+            }
+        });
+        mTimeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTimePickerDialog(false, position);
+            }
+        });
         mSun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -279,12 +311,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 if (isChecked) {
                     alm._sun = 1;
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtSun.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 1);
                 }else{
                     alm._sun = 0;
+                    db.updateAlarm(alm);
                     txtSun.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+1);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -298,7 +333,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 1);
                 db.close();
             }
         });
@@ -310,13 +344,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 if (isChecked) {
                     alm._mon = 1;
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtMon.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 2);
                 }else{
                     alm._mon = 0;
-                    alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtMon.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+2);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -330,7 +366,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 2);
                 db.close();
             }
         });
@@ -342,12 +377,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 if (isChecked) {
                     alm._tue = 1;
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtTue.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 3);
                 }else{
                     alm._tue = 0;
+                    db.updateAlarm(alm);
                     txtTue.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+3);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -361,7 +399,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 3);
                 db.close();
             }
         });
@@ -372,12 +409,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if (isChecked) {
                     alm._wed = 1;
+                    db.updateAlarm(alm);
                     txtWed.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 4);
                 }else{
                     alm._wed = 0;
+                    db.updateAlarm(alm);
                     txtWed.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+4);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -391,7 +431,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 4);
                 db.close();
             }
         });
@@ -403,12 +442,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 if (isChecked) {
                     alm._thu = 1;
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtThu.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 5);
                 }else{
                     alm._thu = 0;
+                    db.updateAlarm(alm);
                     txtThu.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+5);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -422,7 +464,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 5);
                 db.close();
             }
         });
@@ -434,12 +475,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 if (isChecked) {
                     alm._fri = 1;
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtFri.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 6);
                 }else{
                     alm._fri = 0;
+                    db.updateAlarm(alm);
                     txtFri.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+6);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -453,7 +497,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 6);
                 db.close();
             }
         });
@@ -465,12 +508,15 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 if (isChecked) {
                     alm._sat = 1;
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     txtSat.setVisibility(View.VISIBLE);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 7);
                 }else{
                     alm._sat = 0;
+                    db.updateAlarm(alm);
                     txtSat.setVisibility(View.INVISIBLE);
+                    cancelRepeatingAlarm(alm.get_id()*1000+7);
                 }
-                db.updateAlarm(alm);
 
                 if(!repeatExist(position)){
                     mRepeatCheck.setChecked(false);
@@ -484,43 +530,9 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     alm._repeat = 0;
                     db.updateAlarm(alm);
                 }
-                updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 7);
                 db.close();
             }
         });
-
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-        int width = displaymetrics.widthPixels;
-        double mHeight = height - (height * 0.6);
-        final int targetHeight = (int) Math.round(mHeight);
-
-        mDrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRemoveAlarm.setVisibility(View.VISIBLE);
-                mUp.setVisibility(View.VISIBLE);
-                mDrop.setVisibility(View.GONE);
-                mDetailsLay.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, true);
-                dropDownAnim.setDuration(500);
-                mDetailsLay.startAnimation(dropDownAnim);
-            }
-        });
-
-        mUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRemoveAlarm.setVisibility(View.GONE);
-                mUp.setVisibility(View.GONE);
-                mDrop.setVisibility(View.VISIBLE);
-                DropDownAnim dropDownAnim = new DropDownAnim(mDetailsLay, targetHeight, false);
-                dropDownAnim.setDuration(500);
-                mDetailsLay.startAnimation(dropDownAnim);
-            }
-        });
-
         mRepeatCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -528,6 +540,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if(isChecked) {
                     alm._repeat = 1;
+                    db.updateAlarm(alm);
                     if (mDetailsLay.getVisibility() != View.VISIBLE){
                         mRemoveAlarm.setVisibility(View.VISIBLE);
                         mUp.setVisibility(View.VISIBLE);
@@ -546,9 +559,10 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                         mFri.setEnabled(true);
                         mSat.setEnabled(true);
                     }
-                    //cancelAlarmHard(position);
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 0);
                 }else {
                     alm._repeat = 0;
+                    db.updateAlarm(alm);
                     mSun.setEnabled(false);
                     mMon.setEnabled(false);
                     mTue.setEnabled(false);
@@ -556,29 +570,24 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                     mThu.setEnabled(false);
                     mFri.setEnabled(false);
                     mSat.setEnabled(false);
-                    //cancelAlarmHard(position);
+                    cancelAlarmHard(position);
                 }
-                db.updateAlarm(alm);
-                //if (!mGarbTime){
-                //    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
-                //}
                 db.close();
             }
         });
-
         mAlarmOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cancelAlarmHard(position);
                 DatabaseHandler db = new DatabaseHandler(getContext());
                 Alarm alm = db.getAlarm(modelItems.get(position)._id);
                 if(isChecked){
                     alm._status = 1;
+                    updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id, 0);
                 }else{
                     alm._status = 0;
+                    cancelAlarmHard(position);
                 }
                 db.updateAlarm(alm);
-                //updateRepeatingAlarm(alm, getHourFromAlarm(alm), getMinutesFromAlarm(alm), alm._id);
                 db.close();
             }
         });
@@ -589,10 +598,11 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
                 diaBox.show();
             }
         });
-
+/////////////////// End of On-Click Actions /////////////////////////////////////////////////////
 
         return convertView;
     }
+
     private AlertDialog AskOption(int mId){
         final int alm_id = modelItems.get(mId)._id;
         final int mD = mId;
@@ -674,6 +684,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             alm._status = 1;
             db.updateAlarm(alm);
 
+            // Change on View
             Alarm alteredAlarm = modelItems.get(listPosition);
             alteredAlarm._alarm_time = txtToSave;
             alteredAlarm._status = 1;
@@ -684,26 +695,47 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             //mRepeatCheck.setEnabled(true);
             mAlarmOnOff.setEnabled(true);
             int dbId = modelItems.get(listPosition)._id;
-            if (alm.get_repeat() != 1 && !repeatExist(listPosition)){
+            //&& !repeatExist(listPosition)
+            if (alm.get_repeat() == 0){
                setInstantAlarm(calSet, dbId);
             }else{
-                     if(alm.get_sun() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 1);}
-                else if(alm.get_mon() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 2);}
-                else if(alm.get_tue() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 3);}
-                else if(alm.get_wed() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 4);}
-                else if(alm.get_thu() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 5);}
-                else if(alm.get_fri() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 6);}
-                else if(alm.get_sat() == 1){updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 7);}
+                if(repeatExist(listPosition)) {
+                    if (alm.get_sun() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 1);
+                    } else if (alm.get_mon() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 2);
+                    } else if (alm.get_tue() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 3);
+                    } else if (alm.get_wed() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 4);
+                    } else if (alm.get_thu() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 5);
+                    } else if (alm.get_fri() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 6);
+                    } else if (alm.get_sat() == 1) {
+                        updateRepeatingAlarm(alm, hourOfDay, minute, dbId, 7);
+                    }
+                }
             }
             db.close();
         }
     };
+
     private void updateRepeatingAlarm(Alarm alm, int hourOfDay, int minute, int dbId, int key){
-        if (alm.get_repeat() == 1 && alm.get_status() == 1){
-            setRepeatAlarm(key, hourOfDay, minute, dbId);
+        if(key != 0) {
+            if (alm.get_repeat() == 1 && alm.get_status() == 1) {
+                setRepeatAlarm(key, hourOfDay, minute, dbId);
+            }
+        }else{
+                 if(alm.get_sun() == 1){setRepeatAlarm(1, hourOfDay, minute, dbId);}
+            else if(alm.get_mon() == 1){setRepeatAlarm(2, hourOfDay, minute, dbId);}
+            else if(alm.get_tue() == 1){setRepeatAlarm(3, hourOfDay, minute, dbId);}
+            else if(alm.get_wed() == 1){setRepeatAlarm(4, hourOfDay, minute, dbId);}
+            else if(alm.get_thu() == 1){setRepeatAlarm(5, hourOfDay, minute, dbId);}
+            else if(alm.get_fri() == 1){setRepeatAlarm(6, hourOfDay, minute, dbId);}
+            else if(alm.get_sat() == 1){setRepeatAlarm(7, hourOfDay, minute, dbId);}
         }
     }
-
     private void setRepeatAlarm(int weekDay, int hour, int minute, int pos){
         Calendar calNow = Calendar.getInstance();
         Calendar calSet = (Calendar) calNow.clone();
@@ -714,15 +746,36 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         calSet.set(Calendar.SECOND, 0);
         calSet.set(Calendar.MILLISECOND, 0);
 
+        if(calSet.compareTo(calNow) <= 0){
+            //Today Set time passed, count to tomorrow
+            calSet.add(Calendar.DATE, 7);
+        }
+
+        int intentId = (pos * 1000)+ weekDay;
         Intent intent = new Intent(context, AlarmReceiverActivity.class);
         intent.putExtra("requestCode", pos);
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, pos, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.getActivity(context, intentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP,
                 calSet.getTimeInMillis(), 1 * 60 * 60 * 1000, pendingIntent);
         Toast.makeText(context, "Next Alarm Set to "+getTimeDifferenceForDisplay(calNow, calSet)+" from now", Toast.LENGTH_SHORT).show();
     }
+    private void setInstantAlarm(Calendar timeFromNow, int pos){
+        try{
+            int intentId = (pos * 1000)+timeFromNow.getTime().getDay()+1;
+            Intent intent = new Intent(context, AlarmReceiverActivity.class);
+            intent.putExtra("requestCode", pos);
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(context, intentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            am.set(AlarmManager.RTC_WAKEUP, timeFromNow.getTimeInMillis(), pendingIntent);
+            Toast.makeText(context, "Alarm Set to "+getTimeDifferenceForDisplay(Calendar.getInstance(), timeFromNow)+" from now", Toast.LENGTH_SHORT).show();
+        }catch (NumberFormatException e){
+            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private String getTimeDifferenceForDisplay(Calendar from, Calendar to){
         String str = "";
         long dif = (to.getTimeInMillis() - from.getTimeInMillis());
@@ -742,28 +795,6 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         str += (seconds % 60) + " seconds";
         return str; //(days + " days " + hours % 24 + " hours " + minutes % 60 + " minutes " + seconds % 60 + " seconds");
     }
-    private void setInstantAlarm(Calendar timeFromNow, int pos){
-        try{
-            Intent intent = new Intent(context, AlarmReceiverActivity.class);
-            intent.putExtra("requestCode", pos);
-            PendingIntent pendingIntent =
-                    PendingIntent.getActivity(context, pos, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, timeFromNow.getTimeInMillis(), pendingIntent);
-
-
-//            String time =
-//                    String.format("%d hours, %d minutes and %d seconds\n",
-//                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60 * 60),
-//                    (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / (1000 * 60), (int) (timeFromNow.getTimeInMillis() - System.currentTimeMillis()) / 1000
-//            );
-
-            Toast.makeText(context, "Alarm Set to "+getTimeDifferenceForDisplay(Calendar.getInstance(), timeFromNow)+" from now", Toast.LENGTH_SHORT).show();
-        }catch (NumberFormatException e){
-            Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private int getHourFromAlarm(Alarm alm){
         String time = alm.get_alarm_time().split(" ")[0];
         String amPm = alm.get_alarm_time().split(" ")[1];
@@ -788,11 +819,21 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         return tot > 0;
     }
 
+    //With position ID
     private void cancelAlarmHard(int position){
         int mIntent = modelItems.get(position).get_id();
         Intent intent = new Intent(context, AlarmReceiverActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, mIntent, intent, 0);
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pendingIntent);
+    }
+
+    // With Database ID
+    private void cancelRepeatingAlarm(int intendId){
+        Intent intent = new Intent(context, AlarmReceiverActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, intendId, intent, 0);
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
+        Toast.makeText(context, "Repeat Alarm cancelled for that day!", Toast.LENGTH_SHORT).show();
     }
 }
