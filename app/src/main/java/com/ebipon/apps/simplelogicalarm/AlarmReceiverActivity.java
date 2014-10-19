@@ -88,29 +88,6 @@ public class AlarmReceiverActivity extends Activity {
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         Alarm ringingAlarm = db.getAlarm(rowId);
 
-
-/////////////// Notification //////////////////////////////////////////////////////////////////////
-
-        final NotificationManager mgr =
-                (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification note = new Notification(R.drawable.img_backmain,
-                "Wake up!",
-                System.currentTimeMillis());
-        Calendar c = Calendar.getInstance();
-        int intentId = (rowId * 1000)+c.getTime().getDay();
-        // This pending intent will open after notification click
-        PendingIntent mNotifyIntent= PendingIntent.getActivity(this, intentId, getIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
-
-        note.setLatestEventInfo(this, ""+ringingAlarm.get_alarm_time()+" - "+ringingAlarm.get_note(),
-                "Wake up! It's Late Already", mNotifyIntent);
-
-        note.flags |= Notification.FLAG_NO_CLEAR;
-        //After uncomment this line you will see number of notification arrived
-        //note.number=2;
-        mgr.notify(rowId, note);
-        mReqCode = rowId;
-/////////////// End of Notification ///////////////////////////////////////////////////////////////
-
         final LinearLayout mSimple = (LinearLayout) findViewById(R.id.simpleStop);
         final LinearLayout mMid = (LinearLayout) findViewById(R.id.midStop);
         final LinearLayout mHigh = (LinearLayout) findViewById(R.id.hiStop);
@@ -186,6 +163,7 @@ public class AlarmReceiverActivity extends Activity {
         }
 
         db.close();
+        createNotification(2);
         playSound(this, getAlarmUri());
 
         stopAlarm.setOnClickListener(new View.OnClickListener() {
@@ -336,5 +314,38 @@ public class AlarmReceiverActivity extends Activity {
     protected  void onStop(){
         super.onStop();
         mWakeLock.release();
+    }
+
+    public void createNotification(int id){
+        final NotificationManager mgr =
+                (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification note = new Notification(R.drawable.img_backmain,
+                "Wake up!",
+                System.currentTimeMillis());
+        Calendar c = Calendar.getInstance();
+        int intentId = (id * 1000)+c.getTime().getDay();
+        // This pending intent will open after notification click
+        PendingIntent mNotifyIntent= PendingIntent.getActivity(this, intentId, getIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
+
+        note.setLatestEventInfo(this, "Hello",
+                "Wake up! It's Late Already", mNotifyIntent);
+
+        note.flags |= Notification.FLAG_NO_CLEAR;
+        //After uncomment this line you will see number of notification arrived
+        //note.number=2;
+        mgr.notify(id, note);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), "going underground :p", Toast.LENGTH_SHORT).show();
+        moveTaskToBack (true);
+
+        //Log.d("CDA", "onBackPressed Called");
+        //Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        //setIntent.addCategory(Intent.CATEGORY_HOME);
+        //setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //startActivity(setIntent);
+
     }
 }
