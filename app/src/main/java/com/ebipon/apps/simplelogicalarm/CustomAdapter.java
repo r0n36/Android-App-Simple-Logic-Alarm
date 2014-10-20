@@ -7,8 +7,6 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.DisplayMetrics;
 import android.widget.ArrayAdapter;
 import android.app.Activity;
@@ -770,7 +768,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
             Intent intent = new Intent(context, AlarmReceiverActivity.class);
             intent.putExtra("requestCode", pos);
             PendingIntent pendingIntent =
-                    PendingIntent.getActivity(context, intentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent.getActivity(context, intentId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             am.set(AlarmManager.RTC_WAKEUP, timeFromNow.getTimeInMillis(), pendingIntent);
             Toast.makeText(context, "Alarm Set to "+getTimeDifferenceForDisplay(Calendar.getInstance(), timeFromNow)+" from now", Toast.LENGTH_SHORT).show();

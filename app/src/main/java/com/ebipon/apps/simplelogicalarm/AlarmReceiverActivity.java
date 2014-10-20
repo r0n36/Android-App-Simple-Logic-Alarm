@@ -14,8 +14,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -87,6 +85,8 @@ public class AlarmReceiverActivity extends Activity {
         int rowId = getIntent().getIntExtra("requestCode", 1);
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         Alarm ringingAlarm = db.getAlarm(rowId);
+
+        mReqCode = rowId;
 
         final LinearLayout mSimple = (LinearLayout) findViewById(R.id.simpleStop);
         final LinearLayout mMid = (LinearLayout) findViewById(R.id.midStop);
@@ -163,7 +163,7 @@ public class AlarmReceiverActivity extends Activity {
         }
 
         db.close();
-        createNotification(2);
+        createNotification(rowId);
         playSound(this, getAlarmUri());
 
         stopAlarm.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +180,8 @@ public class AlarmReceiverActivity extends Activity {
                 if (Arrays.asList(mList).contains(mInSol.getText().toString().toUpperCase())){
                     mMediaPlayer.stop();
                     finish();
+                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.cancel(mReqCode);
                 }else{
                     Toast.makeText(getApplicationContext(), "Oh! Dear! Our algorithm didn't found any Word like this! Wake up and Try again!", Toast.LENGTH_SHORT).show();
                 }
@@ -313,10 +315,15 @@ public class AlarmReceiverActivity extends Activity {
 
     protected  void onStop(){
         super.onStop();
-        mWakeLock.release();
+        if(mWakeLock.isHeld())
+            mWakeLock.release();
     }
 
     public void createNotification(int id){
+        DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+        Alarm ringingAlarm = db.getAlarm(id);
+        db.close();
+
         final NotificationManager mgr =
                 (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification note = new Notification(R.drawable.img_backmain,
@@ -325,27 +332,30 @@ public class AlarmReceiverActivity extends Activity {
         Calendar c = Calendar.getInstance();
         int intentId = (id * 1000)+c.getTime().getDay();
         // This pending intent will open after notification click
-        PendingIntent mNotifyIntent= PendingIntent.getActivity(this, intentId, getIntent(), PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent mNotifyIntent= PendingIntent.getActivity(this, intentId, getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        note.setLatestEventInfo(this, "Hello",
+        note.setLatestEventInfo(this, ""+ringingAlarm.get_alarm_time()+ " - "+ringingAlarm.get_note(),
                 "Wake up! It's Late Already", mNotifyIntent);
 
         note.flags |= Notification.FLAG_NO_CLEAR;
-        //After uncomment this line you will see number of notification arrived
-        //note.number=2;
         mgr.notify(id, note);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(AlarmReceiverActivity.this, "Hola", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "going underground :p", Toast.LENGTH_SHORT).show();
-        moveTaskToBack (true);
-
-        //Log.d("CDA", "onBackPressed Called");
-        //Intent setIntent = new Intent(Intent.ACTION_MAIN);
-        //setIntent.addCategory(Intent.CATEGORY_HOME);
-        //setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //startActivity(setIntent);
-
+        super.onBackPressed();
     }
+
+
+    //    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//    }
 }
