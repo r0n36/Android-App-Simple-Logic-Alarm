@@ -12,13 +12,6 @@
         android:layout_height="fill_parent"
         android:background="@android:color/background_dark">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stopAlarm"
-            android:id="@+id/btnStopAlarm"
-            android:layout_gravity="center" />
-
         <!--<ImageSwitcher-->
         <!--android:id="@+id/ImageSwitcherBackground"-->
         <!--android:layout_width="wrap_content"-->
@@ -26,13 +19,48 @@
         <!--android:layout_height="wrap_content"-->
         <!--android:background="@drawable/img_backmain">-->
         <!--</ImageSwitcher>-->
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:id="@+id/textClock"
+            android:textStyle="bold"
+            android:textSize="60sp"
+            android:textColor="@android:color/background_light"
+            android:layout_gravity="center"
+            android:typeface="sans"
+            android:layout_marginTop="20sp"
+            android:textAlignment="center"
+            android:gravity="center" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/stopNormalNote"
+            android:gravity="right"
+            android:textColor="@android:color/background_light"
+            android:text="asdas"
+            android:textSize="35sp"
+            android:textStyle="italic"
+            android:paddingRight="20sp" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/StopIns"
+            android:gravity="right"
+            android:textColor="@android:color/background_light"
+            android:text="@string/simStopIns"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            android:paddingRight="20sp" />
+
         <LinearLayout
             android:orientation="horizontal"
             android:id="@+id/LinearLayout_main"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignParentTop="true">
+
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

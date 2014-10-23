@@ -66,7 +66,7 @@ public class AlarmReceiverActivity extends Activity {
 
         setContentView(R.layout.alarm);
 
-        Button stopAlarm = (Button) findViewById(R.id.btnStopAlarm);
+//        Button stopAlarm = (Button) findViewById(R.id.btnStopAlarm);
         Button stopMidAlarm = (Button) findViewById(R.id.midBtnStopAlarm);
         Button stopHighAlarm = (Button) findViewById(R.id.hiBtnStopAlarm);
 //        String newString;
@@ -98,6 +98,7 @@ public class AlarmReceiverActivity extends Activity {
         final TextView mEquation = (TextView) findViewById(R.id.hiEquation);
         final EditText mEnterRes = (EditText) findViewById(R.id.enterRes);
 //        final ImageView mImg = (ImageView) findViewById(R.id.imageView);
+        final TextView mRingNote = (TextView) findViewById(R.id.stopNormalNote);
 
         if(ringingAlarm.get_off_method() == 1){
            mSimple.setVisibility(View.GONE);
@@ -157,6 +158,7 @@ public class AlarmReceiverActivity extends Activity {
 //                    Toast.makeText(getApplicationContext(), "I'm Left yes no fin ^_^", Toast.LENGTH_SHORT).show();
 //                }
 //            });
+            mRingNote.setText(ringingAlarm.get_note());
             LinearLayout mainLayout = (LinearLayout) findViewById(R.id.LinearLayout_main);
             MenuC myView = new MenuC(this);
             mainLayout.addView(myView);
@@ -166,14 +168,14 @@ public class AlarmReceiverActivity extends Activity {
         createNotification(rowId);
         playSound(this, getAlarmUri());
 
-        stopAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.stop();
-                finish();
-
-            }
-        });
+//        stopAlarm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mMediaPlayer.stop();
+//                finish();
+//
+//            }
+//        });
         stopMidAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

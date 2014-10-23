@@ -2,14 +2,22 @@ package com.ebipon.apps.simplelogicalarm;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 
 //menu class
 public class MenuC extends View {
@@ -32,6 +40,10 @@ public class MenuC extends View {
 	
 	private int over_engagement = 15; //how much distance to set over item true
 	private int click_engagement = 25; //how much distanc to set click item true
+
+    // your path
+    Paint mPaint = new Paint();    // your paint
+    private Animation anim;
 
     public MenuC(Context context) {
         super(context);
@@ -93,12 +105,32 @@ public class MenuC extends View {
         menuitems[3].set_position(
         		menuback_X - menuitems[3].get_width() / 2 + menuback_border,
         		menuback_Y - menuitems[3].get_height() / 2 + menuback_height / 2);
-        
+
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(10);
+        mPaint.setColor(Color.WHITE);
+        mPaint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
     }
-    
+
+    private void createAnimation(Canvas canvas) {
+        anim = new RotateAnimation(0, 360, getWidth()/2, getHeight()/2);
+        anim.setRepeatMode(Animation.RESTART);
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(10000L);
+        startAnimation(anim);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
-    	
+        int cx = getWidth()/2; // x-coordinate of center of the screen
+        int cy = getHeight()/2; // y-coordinate of the center of the screen
+
+        // Starts the animation to rotate the circle.
+        if (anim == null) {
+            createAnimation(canvas);
+        }
+
+        canvas.drawCircle(cx, cy, 150, mPaint); // drawing the circle.
     	//draw thigs on pointer selected
     	if(menupointer.get_isselected())
     	{

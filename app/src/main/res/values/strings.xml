@@ -35,5 +35,6 @@
     <string name="wordIns6">..Top to Bottom</string>
     <string name="wordIns7">..Bottom to Top</string>
     <string name="wordIns8">..Diagonally</string>
+    <string name="simStopIns">When lock stops for half of second, grab and slide toward D</string>
 
 </resources>
