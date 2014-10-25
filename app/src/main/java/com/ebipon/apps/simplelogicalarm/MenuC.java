@@ -63,7 +63,8 @@ public class MenuC extends View {
         center_Y = height/2;
         
         //menu background
-        menuback = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_back);
+//        menuback = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_back);
+        menuback = BitmapFactory.decodeResource(context.getResources(), R.drawable.menu_back_v3);
         menuback_center_X = center_X;
         menuback_center_Y = center_Y;
         menuback_width = menuback.getWidth();
@@ -74,7 +75,7 @@ public class MenuC extends View {
         menuback_border = 35;
         
         //pointer (center)
-        menupointer = new MenuCPointer(context, R.drawable.menu_pointer, R.drawable.menu_pointerover, 10);
+        menupointer = new MenuCPointer(context, R.drawable.menu_pointer_v2, R.drawable.menu_pointerover, 10);
         menupointer.set_homeposition(new Point(
         		menuback_X + menuback_width / 2 - menupointer.get_width() / 2,
         		menuback_Y + menuback_height / 2 - menupointer.get_height() / 2));
@@ -122,15 +123,17 @@ public class MenuC extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int cx = getWidth()/2; // x-coordinate of center of the screen
-        int cy = getHeight()/2; // y-coordinate of the center of the screen
+        if (((AlarmReceiverActivity)getContext()).mRinging.get_urgency() == 1) {
+            int cx = getWidth() / 2; // x-coordinate of center of the screen
+            int cy = getHeight() / 2; // y-coordinate of the center of the screen
 
-        // Starts the animation to rotate the circle.
-        if (anim == null) {
-            createAnimation(canvas);
+            // Starts the animation to rotate the circle.
+            if (anim == null) {
+                createAnimation(canvas);
+            }
+
+            canvas.drawCircle(cx, cy, 150, mPaint); // drawing the circle.
         }
-
-        canvas.drawCircle(cx, cy, 150, mPaint); // drawing the circle.
     	//draw thigs on pointer selected
     	if(menupointer.get_isselected())
     	{

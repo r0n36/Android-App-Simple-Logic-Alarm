@@ -21,14 +21,14 @@
         <!--</ImageSwitcher>-->
         <TextClock
             android:layout_width="match_parent"
-            android:layout_height="96dp"
+            android:layout_height="80dp"
             android:id="@+id/textClock"
             android:textStyle="bold"
             android:textSize="60sp"
             android:textColor="@android:color/background_light"
             android:layout_gravity="center"
             android:typeface="sans"
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="10sp"
             android:textAlignment="center"
             android:gravity="center" />
         <TextView
@@ -56,9 +56,7 @@
             android:orientation="horizontal"
             android:id="@+id/LinearLayout_main"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentTop="true">
-
+            android:layout_height="fill_parent">
         </LinearLayout>
 
     </LinearLayout>

@@ -39,6 +39,7 @@ import java.util.Random;
  */
 public class AlarmReceiverActivity extends Activity {
     public MediaPlayer mMediaPlayer;
+    public Alarm mRinging;
     public int mReqCode;
     private PowerManager.WakeLock mWakeLock;
     private String[] mList;
@@ -85,7 +86,7 @@ public class AlarmReceiverActivity extends Activity {
         int rowId = getIntent().getIntExtra("requestCode", 1);
         DatabaseHandler db = new DatabaseHandler(getApplicationContext());
         Alarm ringingAlarm = db.getAlarm(rowId);
-
+        mRinging = ringingAlarm;
         mReqCode = rowId;
 
         final LinearLayout mSimple = (LinearLayout) findViewById(R.id.simpleStop);

@@ -367,6 +367,28 @@
                 </RadioGroup>
             </LinearLayout>
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="15sp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setRingtone"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/background_light"
+                    android:layout_margin="5sp"
+                    android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Looking for Tone ..."
+                    android:textStyle="italic"
+                    android:id="@+id/mRingtone"
+                    android:textColor="@android:color/background_light"
+                    android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"

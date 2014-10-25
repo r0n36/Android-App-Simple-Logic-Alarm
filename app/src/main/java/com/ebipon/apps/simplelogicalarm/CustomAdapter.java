@@ -99,7 +99,7 @@ public class CustomAdapter extends ArrayAdapter<Alarm> {
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int height = displaymetrics.heightPixels;
         int width = displaymetrics.widthPixels;
-        double mHeight = height - (height * 0.6);
+        double mHeight = height - (height * 0.50);
         final int targetHeight = (int) Math.round(mHeight);
         mDrop.setOnClickListener(new View.OnClickListener() {
             @Override
